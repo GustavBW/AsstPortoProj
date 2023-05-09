@@ -154,3 +154,8 @@ AsteroidsGame/DefaultPlayer/target/surefire-reports/2023-05-08T16-36-25_834-jvmR
 AsteroidsGame/DefaultPlayer/target/surefire-reports/dk.sdu.student.mialb21.defaultplayer.PlayerPluginTest.txt
 AsteroidsGame/DefaultPlayer/target/surefire-reports/TEST-dk.sdu.student.mialb21.defaultplayer.PlayerPluginTest.xml
 AsteroidsGame/DefaultPlayer/target/test-classes/META-INF/jpms.args
+AsteroidsGame/Asteroid/target/maven-archiver/pom.properties
+AsteroidsGame/Asteroid/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+AsteroidsGame/Asteroid/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+AsteroidsGame/Collision/target/maven-archiver/pom.properties
+AsteroidsGame/Collision/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
