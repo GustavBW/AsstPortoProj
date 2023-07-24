@@ -3,7 +3,9 @@ package guwan21.common.data;
 import guwan21.common.data.entityparts.EntityPart;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,7 +16,7 @@ public class Entity implements Serializable {
     private float[] shapeY = new float[4];
     private float radius;
     private Color color;
-    private Map<Class, EntityPart> parts;
+    private final Map<Class<? extends EntityPart>, EntityPart> parts;
     
     public Entity() {
         parts = new ConcurrentHashMap<>();
@@ -25,14 +27,19 @@ public class Entity implements Serializable {
         parts.put(part.getClass(), part);
     }
     
-    public void remove(Class partClass) {
+    public <T> void remove(Class<T> partClass) {
         parts.remove(partClass);
     }
-    
-    public <E extends EntityPart> E getPart(Class partClass) {
+
+    @SuppressWarnings("unchecked")
+    public <E extends EntityPart> E getPart(Class<E> partClass) {
         return (E) parts.get(partClass);
     }
-    
+
+    public Collection<EntityPart> getParts(){
+        return parts.values();
+    }
+
     public void setRadius(float r){
         this.radius = r;
     }

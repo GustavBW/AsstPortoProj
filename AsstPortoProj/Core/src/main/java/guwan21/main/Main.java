@@ -7,6 +7,8 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import guwan21.managers.SpringBeansManager;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.awt.*;
+
 public class Main {
 	
 	public static void main(String[] args) {
@@ -17,7 +19,7 @@ public class Main {
 		int height = 1200;
 		cfg.setWindowSizeLimits(width, height, width, height);
 		cfg.setWindowedMode(width, height);
-		cfg.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+		cfg.setResizable(false);
 
 		new Lwjgl3Application(SpringBeansManager.getBean(Game.class), cfg);
 	}

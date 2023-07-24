@@ -10,8 +10,14 @@ import org.springframework.stereotype.Service;
 public class PluginLoader {
 
     public void startPlugins(GameData gameData, World world) {
-        for (IGamePluginService proc : SPILocator.locateAll(IGamePluginService.class)){
-            proc.start(gameData,world);
+        for (IGamePluginService plugin : SPILocator.locateAll(IGamePluginService.class)){
+            plugin.start(gameData,world);
+        }
+    }
+
+    public void stopPlugins(GameData data, World world){
+        for(IGamePluginService plugin : SPILocator.locateAll(IGamePluginService.class)){
+            plugin.stop(data, world);
         }
     }
 }

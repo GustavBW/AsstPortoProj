@@ -1,6 +1,6 @@
 import guwan21.common.services.IEntityProcessingService;
 import guwan21.common.services.IGamePluginService;
-import guwan21.common.services.IPostEntityProcessingService;
+import guwan21.common.services.IEntityPostProcessingService;
 
 module Core {
     requires Common;
@@ -10,7 +10,7 @@ module Core {
 
     uses IGamePluginService;
     uses IEntityProcessingService;
-    uses IPostEntityProcessingService;
+    uses IEntityPostProcessingService;
 
     exports guwan21.components;
     exports guwan21.main;

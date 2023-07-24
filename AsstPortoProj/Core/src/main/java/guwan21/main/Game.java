@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import guwan21.common.data.Color;
-import guwan21.common.services.IPostEntityProcessingService;
-import guwan21.common.util.SPILocator;
 import guwan21.components.PluginLoader;
 import guwan21.components.EntityPostProcessingServicesRunner;
 import guwan21.components.EntityProcessingServicesRunner;
@@ -15,7 +13,6 @@ import guwan21.managers.GameInputProcessor;
 import guwan21.common.data.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
-import guwan21.common.services.IEntityProcessingService;
 import guwan21.managers.SpringBeansManager;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
@@ -122,7 +119,7 @@ public class Game
 
     @Override
     public void dispose() {
-
+        SpringBeansManager.forAnyOf(PluginLoader.class, loader -> loader.stopPlugins(data,world));
     }
 
 }

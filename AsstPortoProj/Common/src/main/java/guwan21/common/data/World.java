@@ -31,8 +31,17 @@ public class World {
         return entityMap.values();
     }
 
-    public <E extends Entity> List<Entity> getEntities(Class<E>... entityTypes) {
-        List<Entity> r = new ArrayList<Entity>();
+    public <E extends Entity> void removeEntities(Class<E> type){
+        for(Map.Entry<String,Entity> entry : entityMap.entrySet()){
+            if(type.equals(entry.getValue().getClass())){
+                entityMap.remove(entry.getKey());
+            }
+        }
+    }
+
+    @SafeVarargs
+    public final <E extends Entity> List<Entity> getEntities(Class<E>... entityTypes) {
+        List<Entity> r = new ArrayList<>();
         for (Entity e : getEntities()) {
             for (Class<E> entityType : entityTypes) {
                 if (entityType.equals(e.getClass())) {

@@ -5,13 +5,13 @@ import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.PositionPart;
-import guwan21.common.services.IPostEntityProcessingService;
+import guwan21.common.services.IEntityPostProcessingService;
 
 import java.util.List;
 
-public class CollisionDetector implements IPostEntityProcessingService {
+public class CollisionDetector implements IEntityPostProcessingService {
     @Override
-    public void process(GameData gameData, World world) {
+    public void process(GameData data, World world) {
 
         List<Entity> entities1 = world.getEntities().stream().toList();
         List<Entity> entities2 = world.getEntities().stream().toList();

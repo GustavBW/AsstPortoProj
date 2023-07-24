@@ -1,7 +1,7 @@
 import guwan21.common.services.IBulletCreator;
 import guwan21.common.services.IEntityProcessingService;
 import guwan21.common.services.IGamePluginService;
-import guwan21.common.services.IPostEntityProcessingService;
+import guwan21.common.services.IEntityPostProcessingService;
 
 module Common {
     exports guwan21.common.services;
@@ -12,5 +12,5 @@ module Common {
     uses IBulletCreator;
     uses IGamePluginService;
     uses IEntityProcessingService;
-    uses IPostEntityProcessingService;
+    uses IEntityPostProcessingService;
 }

@@ -1,7 +1,7 @@
-import guwan21.common.services.IPostEntityProcessingService;
+import guwan21.common.services.IEntityPostProcessingService;
 
 module Collision {
     requires Common;
 
-    provides IPostEntityProcessingService with guwan21.collision.CollisionDetector;
+    provides IEntityPostProcessingService with guwan21.collision.CollisionDetector;
 }

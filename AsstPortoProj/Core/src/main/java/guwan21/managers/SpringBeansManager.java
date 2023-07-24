@@ -42,16 +42,18 @@ public class SpringBeansManager {
         forAnyOfEither(context,functions);
     }
 
+    /**
+     * May throw NullPointerException if there is no function for a given class
+     * @param context
+     * @param functions
+     */
     @SuppressWarnings("unchecked")
     public static void forAnyOfEither(AnnotationConfigApplicationContext context, LinkedHashMap<Class<?>, VoidFunction<?>> functions){
         for(Class<?> clazz : functions.keySet()){
-            functions.computeIfAbsent(clazz, k -> (t) -> {});
             try{
                 @SuppressWarnings("rawtypes")
                 VoidFunction func = functions.get(clazz);
-                Object bean = context.getBean(clazz);
-                func.run(bean);
-                System.out.println("On update ran forAnyOfEither for class: " + clazz.toString());
+                func.run(context.getBean(clazz));
             }catch (ClassCastException | IllegalArgumentException | NullPointerException ignored){
                 System.out.println("Unable to run provided / empty function for class: " + clazz.toString());
             }
