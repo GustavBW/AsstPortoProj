@@ -6,13 +6,11 @@ import guwan21.common.services.IPostEntityProcessingService;
 import guwan21.common.util.SPILocator;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-@Service("PostProcessInjector")
-public class PostProcessInjection implements IProcessor {
+@Service
+public class EntityPostProcessingServicesRunner implements IProcessor {
     @Override
     public void process(GameData data, World world) {
-        for(IProcessor proc : SPILocator.locateAll(IPostEntityProcessingService.class)){
+        for(IPostEntityProcessingService proc : SPILocator.locateAll(IPostEntityProcessingService.class)){
             proc.process(data,world);
         }
     }

@@ -6,14 +6,12 @@ import guwan21.common.services.IGamePluginService;
 import guwan21.common.util.SPILocator;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-@Service("MainInjector")
-public class PluginInjection {
+@Service
+public class PluginLoader {
 
     public void startPlugins(GameData gameData, World world) {
-        for (IProcessor proc : SPILocator.locateAll(IGamePluginService.class)){
-            proc.process(gameData,world);
+        for (IGamePluginService proc : SPILocator.locateAll(IGamePluginService.class)){
+            proc.start(gameData,world);
         }
     }
 }

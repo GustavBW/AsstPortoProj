@@ -8,23 +8,26 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import guwan21.common.data.Color;
 import guwan21.common.services.IPostEntityProcessingService;
 import guwan21.common.util.SPILocator;
-import guwan21.components.IProcessor;
-import guwan21.components.PluginInjection;
+import guwan21.components.PluginLoader;
+import guwan21.components.EntityPostProcessingServicesRunner;
+import guwan21.components.EntityProcessingServicesRunner;
 import guwan21.managers.GameInputProcessor;
 import guwan21.common.data.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.services.IEntityProcessingService;
+import guwan21.managers.SpringBeansManager;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
+import java.util.*;
 
-@Component("GameInstance")
+@Component
 public class Game
         implements ApplicationListener {
 
-    private AnnotationConfigApplicationContext components;
+    private final LinkedHashMap<Class<?>, SpringBeansManager.VoidFunction<?>> onUpdateRun = new LinkedHashMap<>();
+    private final AnnotationConfigApplicationContext onUpdateContext = SpringBeansManager.getContextFor("guwan21.components");
 
     private static OrthographicCamera cam;
     private ShapeRenderer sr;
@@ -32,11 +35,7 @@ public class Game
     private final GameData data = new GameData();
     private World world = new World();
 
-    public Game() {
-        this.components = new AnnotationConfigApplicationContext();
-        this.components.scan("guwan21.components");
-        this.components.refresh();
-    }
+    public Game() {}
 
     @Override
     public void create() {
@@ -53,7 +52,9 @@ public class Game
             new GameInputProcessor(data)
         );
 
-        ((PluginInjection) components.getBean("MainInjector")).startPlugins(data, world);
+        SpringBeansManager.forAnyOf(PluginLoader.class, loader -> loader.startPlugins(data,world));
+        onUpdateRun.put(EntityProcessingServicesRunner.class, (SpringBeansManager.VoidFunction<EntityProcessingServicesRunner>) r -> r.process(data,world));
+        onUpdateRun.put(EntityPostProcessingServicesRunner.class, (SpringBeansManager.VoidFunction<EntityPostProcessingServicesRunner>) r -> r.process(data,world));
     }
 
     @Override
@@ -81,8 +82,7 @@ public class Game
     }
 
     private void update() {
-        ((IProcessor) components.getBean("SubProcessInjector")).process(data, world);
-        ((IProcessor) components.getBean("PostProcessInjector")).process(data, world);
+        SpringBeansManager.forAnyOfEither(onUpdateContext, onUpdateRun);
     }
 
     private void draw() {
@@ -122,13 +122,7 @@ public class Game
 
     @Override
     public void dispose() {
+
     }
 
-    private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
-        return SPILocator.locateAll(IEntityProcessingService.class);
-    }
-
-    private Collection<? extends IPostEntityProcessingService> getPostEntityProcessingServices() {
-        return SPILocator.locateAll(IPostEntityProcessingService.class);
-    }
 }

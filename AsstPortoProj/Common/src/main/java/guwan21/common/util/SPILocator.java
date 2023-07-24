@@ -14,6 +14,7 @@ public class SPILocator {
     private SPILocator() {
     }
 
+
     public static <T> List<T> locateAll(Class<T> clazz) {
         ServiceLoader<?> loader = loadermap.get(clazz);
 
@@ -24,10 +25,10 @@ public class SPILocator {
 
         List<T> list = new ArrayList<T>();
 
-
         try {
             for (Object instance : loader) {
                 try{
+                    @SuppressWarnings("unchecked")
                     T duckTyped = (T) instance;
                     list.add(duckTyped);
                 }catch (ClassCastException ignored){}

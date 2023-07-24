@@ -6,14 +6,11 @@ import guwan21.common.services.IEntityProcessingService;
 import guwan21.common.util.SPILocator;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-@Service("SubProcessInjector")
-public class ProcessInjection implements IProcessor {
+@Service
+public class EntityProcessingServicesRunner implements IProcessor {
     @Override
     public void process(GameData data, World world) {
-        List<IEntityProcessingService> processors = SPILocator.locateAll(IEntityProcessingService.class);
-        for(IProcessor proc : processors){
+        for(IEntityProcessingService proc : SPILocator.locateAll(IEntityProcessingService.class)){
             proc.process(data,world);
         }
     }

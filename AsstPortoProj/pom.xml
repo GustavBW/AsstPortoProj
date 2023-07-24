@@ -10,8 +10,8 @@
     <properties>
         <java>java</java> <!-- This was missing, and is required for ${java} to work in executable -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>18</maven.compiler.source>
-        <maven.compiler.target>18</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
 
         <spring.version>6.0.2</spring.version>
 

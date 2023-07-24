@@ -22,7 +22,9 @@ public class CollisionDetector implements IPostEntityProcessingService {
                 final Entity e1 = entities1.get(i);
                 final Entity e2 = entities2.get(j);
 
-                if(checkCollision(e1,e2)){
+                LifePart lpE1 = e1.getPart(LifePart.class);
+
+                if(checkCollision(e1,e2) && lpE1.getLife() > 0){
                     ((LifePart) (e1.getPart(LifePart.class))).setIsHit(true);
                 }
             }

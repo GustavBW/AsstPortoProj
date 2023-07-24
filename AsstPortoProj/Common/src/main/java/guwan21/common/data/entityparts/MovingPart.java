@@ -1,7 +1,7 @@
 package guwan21.common.data.entityparts;
 
-import dk.sdu.student.mialb21.common.data.GameData;
-import dk.sdu.student.mialb21.common.data.Entity;
+import guwan21.common.data.GameData;
+import guwan21.common.data.Entity;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;

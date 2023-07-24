@@ -1,7 +1,7 @@
-package dk.sdu.student.mialb21.defaultplayer;
+package guwan21.player;
 
-import dk.sdu.student.mialb21.common.data.GameData;
-import dk.sdu.student.mialb21.common.data.World;
+import guwan21.common.data.GameData;
+import guwan21.common.data.World;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
