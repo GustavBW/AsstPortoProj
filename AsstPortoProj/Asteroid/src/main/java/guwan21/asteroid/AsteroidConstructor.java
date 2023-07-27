@@ -21,7 +21,7 @@ public class AsteroidConstructor {
      * @param asteroid Asteroid entity to have its radius updated
      */
     public void setAsteroidRadius(Entity asteroid) {
-        float radius = switch (((LifePart) asteroid.getPart(LifePart.class)).getLife()) {
+        float radius = switch (asteroid.getPart(LifePart.class).getLife()) {
             case 1 -> 10;
             case 2 -> 15;
             default -> 25;
@@ -35,12 +35,16 @@ public class AsteroidConstructor {
      * @param asteroid instance
      */
     public void build(Entity asteroid, float startPosX, float startPosY, float velocityRad, float startSpeed) {
+       build(asteroid,startPosX,startPosY,velocityRad,startSpeed,baseHitPoint);
+    }
+
+    public void build(Entity asteroid, float startPosX, float startPosY, float trajectory, float startSpeed, int hp){
         asteroid.setShapeX(new float[defaultMeshSize]);
         asteroid.setShapeY(new float[defaultMeshSize]);
         asteroid.setColor(defaultColor);
         asteroid.add(new MovingPart(0,0,400,0, startSpeed));
-        asteroid.add(new PositionPart(startPosX, startPosY, velocityRad));
-        LifePart lifePart = new LifePart(baseHitPoint, 0);
+        asteroid.add(new PositionPart(startPosX, startPosY, trajectory));
+        LifePart lifePart = new LifePart(baseHitPoint, 1_000_000);
         asteroid.add(lifePart);
         this.setAsteroidRadius(asteroid);
     }

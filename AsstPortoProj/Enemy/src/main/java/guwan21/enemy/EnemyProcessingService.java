@@ -7,55 +7,46 @@ import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.MovingPart;
 import guwan21.common.data.entityparts.PositionPart;
-import guwan21.common.data.entityparts.ShootingPart;
+import guwan21.common.data.entityparts.WeaponPart;
 import guwan21.common.services.IBulletCreator;
 import guwan21.common.services.IEntityProcessingService;
 import guwan21.common.util.SPILocator;
-import java.util.Collection;
 
-public class EnemyControlSystem implements IEntityProcessingService {
+public class EnemyProcessingService implements IEntityProcessingService {
 
-    private float totalTime = 0f;
+    private float secondsFromGameStart = 0;
 
     @Override
-    public void process(GameData gameData, World world) {
+    public void process(GameData data, World world) {
         for (Entity enemy : world.getEntities(Enemy.class)) {
-            PositionPart positionPart = enemy.getPart(PositionPart.class);
             MovingPart movingPart = enemy.getPart(MovingPart.class);
-            ShootingPart shootingPart = enemy.getPart(ShootingPart.class);
-            LifePart lifePart = enemy.getPart(LifePart.class);
+            WeaponPart weaponPart = enemy.getPart(WeaponPart.class);
 
-            this.totalTime = (this.totalTime + gameData.getDelta()) % 100;
-
-            float controlRotateAmplifier = (float) (Math.random() * 2f) + 0.1f;
-            float controlGeneralAmplifier = (float) (Math.random() * 2f) + 0.1f;
-
-            movingPart.setLeft(
-                    (Math.sin(totalTime * controlRotateAmplifier + (Math.random() * 2f)) * controlGeneralAmplifier) < this.getRandomNumber(-0.3f, -controlGeneralAmplifier)
-            );
-            movingPart.setRight(
-                    (Math.sin(totalTime * controlRotateAmplifier + (Math.random() * 2f)) * controlGeneralAmplifier) > this.getRandomNumber(0.8f, controlGeneralAmplifier)
-            );
-            movingPart.setUp(
-                    this.getRandomNumber(0.01f, 1f) > this.getRandomNumber(0.5f, 1f)
-            );
-
-            movingPart.process(gameData, enemy);
-            positionPart.process(gameData, enemy);
-            shootingPart.process(gameData, enemy);
-            lifePart.process(gameData, enemy);
-
-            shootingPart.setShooting(this.getRandomNumber(0f,1f) > 0.99f);
-            if (shootingPart.getShooting()) {
-                Collection<IBulletCreator> bulletPlugins = SPILocator.locateAll(IBulletCreator.class);
-
-                for (IBulletCreator bulletPlugin : bulletPlugins) {
-                    world.addEntity(bulletPlugin.create(enemy, gameData));
-                }
+            enemy.getParts().forEach(ep -> ep.process(data,enemy));
+            if (enemy.getPart(LifePart.class).isDead()) {
+                world.removeEntity(enemy);
+                continue;
             }
 
-            if (lifePart.isDead()) {
-                world.removeEntity(enemy);
+            secondsFromGameStart += data.getDelta();
+
+            if(Math.floor(secondsFromGameStart) % 2 == 0){
+                final int rand = (int) (Math.random() * 3);
+                movingPart.setUp(false);
+                movingPart.setRight(false);
+                movingPart.setLeft(false);
+                weaponPart.setFiring(false);
+                switch (rand){
+                    case 0 -> movingPart.setLeft(true);
+                    case 1 -> movingPart.setRight(true);
+                    case 2 -> movingPart.setUp(true);
+                }
+                continue;
+            }
+
+            weaponPart.setFiring(true);
+            if (weaponPart.isFiring()) {
+                SPILocator.locateAll(IBulletCreator.class).forEach(bc -> bc.fire(enemy,world));
             }
 
             updateShape(enemy);
@@ -104,10 +95,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
-    }
-
-    private float getRandomNumber(float min, float max) {
-        return (float) ((Math.random() * (max - min)) + min);
     }
 }
 

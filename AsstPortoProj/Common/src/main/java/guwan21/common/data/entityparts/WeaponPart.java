@@ -3,41 +3,40 @@ package guwan21.common.data.entityparts;
 import guwan21.common.data.Entity;
 import guwan21.common.data.GameData;
 
-public class ShootingPart implements  EntityPart {
+public class WeaponPart implements  EntityPart {
     private float cooldownTime;
     private float cooldown;
-    private boolean shooting;
+    private boolean firing;
 
-    private String bulletClass;
 
-    public ShootingPart(float cooldownTime) {
+    public WeaponPart(float cooldownTime) {
         this.cooldownTime = cooldownTime;
     }
 
-    public void setShooting(boolean shooting) {
-        if (!shooting) {
-            this.shooting = false;
+    public void setFiring(boolean firing) {
+        if (!firing) {
+            this.firing = false;
             return;
         }
 
         if (cooldown > 0) {
-            this.shooting = false;
+            this.firing = false;
             return;
         }
 
-        this.shooting = true;
+        this.firing = true;
         this.cooldown = this.cooldownTime;
     }
 
-    public boolean getShooting() {
-        return this.shooting;
+    public boolean isFiring() {
+        return this.firing;
     }
 
     @Override
     public void process(GameData gameData, Entity entity) {
         if (this.cooldown > 0) {
             this.cooldown -= gameData.getDelta();
-            this.shooting = false;
+            this.firing = false;
         } else {
             this.cooldown = 0;
         }

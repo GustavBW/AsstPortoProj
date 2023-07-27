@@ -7,9 +7,9 @@ import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.services.IEntityPostProcessingService;
 
-public class AsteroidSplitterator implements IEntityPostProcessingService {
+public class AsteroidSplitteratorService implements IEntityPostProcessingService {
 
-    private final AsteroidFragmentPlugin asteroidPlugin = new AsteroidFragmentPlugin();
+    private final AsteroidFragmentationPlugin asteroidPlugin = new AsteroidFragmentationPlugin();
     /**
      * For any Asteroid; split if hit
      * Pre-condition: Any asteroid  and has a lifepart
@@ -24,8 +24,8 @@ public class AsteroidSplitterator implements IEntityPostProcessingService {
 
             LifePart lifePart = asteroid.getPart(LifePart.class);
 
-            if (!lifePart.isIsHit() || lifePart.isDead() || lifePart.getLife() <= 1) {
-                return;
+            if (lifePart.isHit() && !lifePart.isDead()) {
+                continue;
             }
 
             asteroidPlugin.fracture(world, asteroid);

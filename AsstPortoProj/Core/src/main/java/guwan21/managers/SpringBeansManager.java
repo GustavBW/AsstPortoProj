@@ -56,6 +56,7 @@ public class SpringBeansManager {
                 func.run(context.getBean(clazz));
             }catch (ClassCastException | IllegalArgumentException | NullPointerException ignored){
                 System.out.println("Unable to run provided / empty function for class: " + clazz.toString());
+                ignored.printStackTrace();
             }
         }
     }

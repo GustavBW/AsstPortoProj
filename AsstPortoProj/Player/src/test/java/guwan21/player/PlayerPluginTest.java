@@ -2,37 +2,38 @@ package guwan21.player;
 
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
+import guwan21.common.services.IGamePluginService;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PlayerPluginTest {
-    private static GameData mockedGameData;
-    private static World mockedWorld;
-    private static PlayerPlugin playerPlugin;
 
     @BeforeAll
     static void setUp() {
-        mockedGameData = mock(GameData.class);
-        mockedWorld = mock(World.class);
-        playerPlugin = new PlayerPlugin();
     }
 
     @Test
-    @Order(1)
     void start() {
-        playerPlugin.start(mockedGameData, mockedWorld);
+        IGamePluginService plugin = new PlayerPlugin();
+        World mockWorld = mock(World.class);
+        GameData mockData = mock(GameData.class);
+        plugin.start(mockData, mockWorld);
 
-        verify(mockedWorld).addEntity(any(Player.class));
+        verify(mockWorld, times(1)).addEntity(any(Player.class));
+        verify(mockWorld, never()).removeEntity(any(Player.class));
     }
 
     @Test
-    @Order(2)
     void stop() {
-        playerPlugin.stop(mockedGameData, mockedWorld);
+        IGamePluginService plugin = new PlayerPlugin();
+        World mockWorld = mock(World.class);
+        GameData mockData = mock(GameData.class);
 
-        verify(mockedWorld).removeEntity(any(Player.class));
+        plugin.stop(mockData, mockWorld);
+
+        verify(mockWorld, times(1)).removeEntities(Player.class);
+        verify(mockWorld, never()).addEntity(any(Player.class));
     }
 }

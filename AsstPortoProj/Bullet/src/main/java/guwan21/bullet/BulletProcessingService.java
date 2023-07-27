@@ -4,28 +4,21 @@ import guwan21.common.data.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
-import guwan21.common.data.entityparts.MovingPart;
 import guwan21.common.data.entityparts.PositionPart;
 import guwan21.common.services.IEntityProcessingService;
 
-public class BulletControlSystem implements IEntityProcessingService {
+public class BulletProcessingService implements IEntityProcessingService {
     @Override
-    public void process(GameData gameData, World world) {
+    public void process(GameData data, World world) {
         for (Entity bullet : world.getEntities(Bullet.class)) {
-            PositionPart positionPart = bullet.getPart(PositionPart.class);
-            MovingPart movingPart = bullet.getPart(MovingPart.class);
-            LifePart lifePart = bullet.getPart(LifePart.class);
+            if (bullet.getPart(LifePart.class).isDead()) {
+                world.removeEntity(bullet);
+                continue;
+            }
 
-            movingPart.process(gameData, bullet);
-            positionPart.process(gameData, bullet);
-            lifePart.reduceExpiration(gameData.getDelta());
-            lifePart.process(gameData, bullet);
+            bullet.getParts().forEach(bp -> bp.process(data, bullet));
 
             updateShape(bullet);
-
-            if (lifePart.getExpiration() <= 0 || lifePart.isDead()) {
-                world.removeEntity(bullet);
-            }
         }
     }
 

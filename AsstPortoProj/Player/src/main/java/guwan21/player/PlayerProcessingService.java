@@ -7,41 +7,33 @@ import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.MovingPart;
 import guwan21.common.data.entityparts.PositionPart;
-import guwan21.common.data.entityparts.ShootingPart;
+import guwan21.common.data.entityparts.WeaponPart;
 import guwan21.common.services.IBulletCreator;
 import guwan21.common.services.IEntityProcessingService;
 import guwan21.common.util.SPILocator;
-import java.util.Collection;
 
-public class PlayerControlSystem implements IEntityProcessingService {
+public class PlayerProcessingService implements IEntityProcessingService {
     @Override
-    public void process(GameData gameData, World world) {
+    public void process(GameData data, World world) {
         for (Entity player : world.getEntities(Player.class)) {
-            PositionPart positionPart = player.getPart(PositionPart.class);
+
             MovingPart movingPart = player.getPart(MovingPart.class);
-            ShootingPart shootingPart = player.getPart(ShootingPart.class);
-            LifePart lifePart = player.getPart(LifePart.class);
+            WeaponPart weaponPart = player.getPart(WeaponPart.class);
 
-            movingPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
-            movingPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
-            movingPart.setUp(gameData.getKeys().isDown(GameKeys.UP));
-
-            movingPart.process(gameData, player);
-            positionPart.process(gameData, player);
-            shootingPart.process(gameData, player);
-            lifePart.process(gameData, player);
-
-            shootingPart.setShooting(gameData.getKeys().isDown(GameKeys.SPACE));
-            if (shootingPart.getShooting()) {
-                Collection<IBulletCreator> bulletPlugins = SPILocator.locateAll(IBulletCreator.class);
-
-                for (IBulletCreator bulletPlugin : bulletPlugins) {
-                    world.addEntity(bulletPlugin.create(player, gameData));
-                }
+            if (player.getPart(LifePart.class).isDead()) {
+                world.removeEntity(player);
+                continue;
             }
 
-            if (lifePart.isDead()) {
-                world.removeEntity(player);
+            movingPart.setLeft(data.getKeys().isDown(GameKeys.LEFT));
+            movingPart.setRight(data.getKeys().isDown(GameKeys.RIGHT));
+            movingPart.setUp(data.getKeys().isDown(GameKeys.UP));
+
+            player.getParts().forEach(p -> p.process(data, player));
+
+            weaponPart.setFiring(data.getKeys().isDown(GameKeys.SPACE));
+            if (weaponPart.isFiring()) {
+                SPILocator.locateAll(IBulletCreator.class).forEach(bc -> bc.fire(player,world));
             }
 
             updateShape(player);

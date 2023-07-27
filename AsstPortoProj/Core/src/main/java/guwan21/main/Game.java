@@ -30,7 +30,7 @@ public class Game
     private ShapeRenderer sr;
 
     private final GameData data = new GameData();
-    private World world = new World();
+    private final World world = new World();
 
     public Game() {}
 

@@ -13,12 +13,8 @@ import guwan21.common.services.IGamePluginService;
 
 public class BulletPlugin implements IGamePluginService, IBulletCreator {
 
-    private Entity bullet;
-
-    public BulletPlugin() {}
-
     @Override
-    public void start(GameData gameData, World world) {
+    public void start(GameData data, World world) {
 
     }
 
@@ -28,50 +24,44 @@ public class BulletPlugin implements IGamePluginService, IBulletCreator {
      * Pre-condition: New bullet entity has to be created for the game from a shooter <br />
      * Post-condition: Bullet entity, that has parameters, such that it is shot from shooter
      *
-     * @param gameData Data for the game
      * @return Bullet entity with initial data from shooter
      */
-    private Entity createBullet(GameData gameData, Entity shooter) {
-        PositionPart shooterPosition = shooter.getPart(PositionPart.class);
-        MovingPart shooterMovement = shooter.getPart(MovingPart.class);
-
-        float deacceleration = 0;
-        float acceleration = 0;
-        float maxSpeed = 1000;
-        float rotationSpeed = 5;
-        float radians = shooterPosition.getRadians();
-
+    private Entity create(Entity shotOrigin) {
         Entity bullet = new Bullet();
 
         bullet.setRadius(1);
+        PositionPart soPosition = shotOrigin.getPart(PositionPart.class);
+        final float radians = soPosition.getRadians();
+        final float radius = shotOrigin.getRadius();
 
-        float dx = (float) (Math.cos(radians) * shooter.getRadius());
-        float dy = (float) (Math.sin(radians) * shooter.getRadius());
+        float dx = (float) (Math.cos(radians) * radius);
+        float dy = (float) (Math.sin(radians) * radius);
 
-        float bx = (float) Math.cos(radians) * shooter.getRadius() * bullet.getRadius();
-        float x = bx + shooterPosition.getX() + dx;
-        float by = (float) Math.sin(radians) * shooter.getRadius() * bullet.getRadius();
-        float y = by + shooterPosition.getY() + dy;
-        float shootSpeed = 350 + (shooterMovement.getSpeed());
+        MovingPart soMovePart = shotOrigin.getPart(MovingPart.class);
+        float bx = (float) Math.cos(radians) * radius;
+        float x = bx + soPosition.getX() + dx;
+        float by = (float) Math.sin(radians) * radius;
+        float y = by + soPosition.getY() + dy;
+        float projectileVelocity = 350 + (soMovePart.getSpeed());
 
         bullet.setShapeX(new float[4]);
         bullet.setShapeY(new float[4]);
         bullet.setColor(new Color(1,1,1,1));
-        bullet.add(new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed, shootSpeed));
+        bullet.add(new MovingPart(0,0,1000,5, projectileVelocity));
         bullet.add(new PositionPart(x, y, radians));
-        bullet.add(new LifePart(1, 1));
+        bullet.add(new LifePart(1, 10));
 
         return bullet;
     }
 
     @Override
-    public void stop(GameData gameData, World world) {
-        // Remove entities
-        world.removeEntity(bullet);
+    public void stop(GameData data, World world) {
+        world.removeEntities(Bullet.class);
     }
 
     @Override
-    public Entity create(Entity shooter, GameData gameData) {
-        return this.createBullet(gameData, shooter);
+    public void fire(Entity shotOrigin, World world) {
+        Entity bullet = this.create(shotOrigin);
+        world.addEntity(bullet);
     }
 }

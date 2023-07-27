@@ -7,7 +7,7 @@ import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.MovingPart;
 import guwan21.common.data.entityparts.PositionPart;
-import guwan21.common.data.entityparts.ShootingPart;
+import guwan21.common.data.entityparts.WeaponPart;
 import guwan21.common.services.IGamePluginService;
 
 public class EnemyPlugin implements IGamePluginService {
@@ -17,9 +17,9 @@ public class EnemyPlugin implements IGamePluginService {
     }
 
     @Override
-    public void start(GameData gameData, World world) {
+    public void start(GameData data, World world) {
         for (int i = 0; i < this.getRandomNumber(2, 5); i++) {
-            world.addEntity(this.createEnemyShip(gameData));
+            world.addEntity(this.createEnemyShip(data));
         }
     }
 
@@ -52,13 +52,13 @@ public class EnemyPlugin implements IGamePluginService {
         enemyShip.add(new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed, 50));
         enemyShip.add(new PositionPart(x, y, radians));
         enemyShip.add(new LifePart(1, 0));
-        enemyShip.add(new ShootingPart(0.2f));
+        enemyShip.add(new WeaponPart(0.2f));
 
         return enemyShip;
     }
 
     @Override
-    public void stop(GameData gameData, World world) {
+    public void stop(GameData data, World world) {
         // Remove entities
         for (Entity enemy : world.getEntities(Enemy.class)) {
             world.removeEntity(enemy);

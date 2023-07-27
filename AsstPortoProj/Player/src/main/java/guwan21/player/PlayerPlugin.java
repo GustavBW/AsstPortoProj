@@ -6,59 +6,54 @@ import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.MovingPart;
 import guwan21.common.data.entityparts.PositionPart;
-import guwan21.common.data.entityparts.ShootingPart;
+import guwan21.common.data.entityparts.WeaponPart;
 import guwan21.common.services.IGamePluginService;
 
 public class PlayerPlugin implements IGamePluginService {
-
-    private Entity player;
 
     public PlayerPlugin() {
 
     }
 
     @Override
-    public void start(GameData gameData, World world) {
-
-        // Add entities to the world
-        player = createPlayerShip(gameData);
+    public void start(GameData data, World world) {
+        Entity player = createPlayer(data);
         world.addEntity(player);
     }
 
     /**
-     * Create player ship entity with default data and parts
-     * <br />
-     * Pre-condition: New player entity has to be created for the game <br />
-     * Post-condition: Player entity, that has default parameters and parts
+     * Create player
+     * Pre-condition: No playable character exists
+     * Post-condition: A playable character exists
      *
-     * @param gameData Data for the game
-     * @return Player entity with default parameters and parts
+     * @param gameData Current game state
+     * @return Player entity
      */
-    private Entity createPlayerShip(GameData gameData) {
+    private Entity createPlayer(GameData gameData) {
+        Entity player = new Player();
 
-        float deacceleration = 10;
-        float acceleration = 200;
-        float maxSpeed = 300;
-        float rotationSpeed = 5;
-        float x = gameData.getDisplayWidth() / 2;
-        float y = gameData.getDisplayHeight() / 2;
-        float radians = 3.1415f / 2;
+        player.setRadius(8);
 
-        Entity playerShip = new Player();
+        player.add(new MovingPart(
+                10,
+                200,
+                300,
+                5,
+                0
+        ));
+        player.add(new PositionPart(
+                gameData.getDisplayWidth() / 2f,
+                gameData.getDisplayHeight() / 2f,
+                (float) Math.PI / 2
+        ));
+        player.add(new LifePart(1, 0));
+        player.add(new WeaponPart(0.2f));
 
-        playerShip.setRadius(8);
-
-        playerShip.add(new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed, 0));
-        playerShip.add(new PositionPart(x, y, radians));
-        playerShip.add(new LifePart(1, 0));
-        playerShip.add(new ShootingPart(0.2f));
-
-        return playerShip;
+        return player;
     }
 
     @Override
-    public void stop(GameData gameData, World world) {
-        // Remove entities
-        world.removeEntity(player);
+    public void stop(GameData data, World world) {
+        world.removeEntities(Player.class);
     }
 }
