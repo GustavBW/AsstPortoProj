@@ -28,9 +28,11 @@ public class EnemyProcessingService implements IEntityProcessingService {
                 continue;
             }
 
+            updateShape(enemy);
+
             secondsFromGameStart += data.getDelta();
 
-            if(Math.floor(secondsFromGameStart) % 2 == 0){
+            if(Math.floor(secondsFromGameStart % 2) == 0){
                 final int rand = (int) (Math.random() * 3);
                 movingPart.setUp(false);
                 movingPart.setRight(false);
@@ -49,7 +51,6 @@ public class EnemyProcessingService implements IEntityProcessingService {
                 SPILocator.locateAll(IBulletCreator.class).forEach(bc -> bc.fire(enemy,world));
             }
 
-            updateShape(enemy);
         }
     }
 

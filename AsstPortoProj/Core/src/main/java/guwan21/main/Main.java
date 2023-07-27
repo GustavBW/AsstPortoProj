@@ -16,15 +16,15 @@ public class Main {
 	public static void main(String[] args) {
 		Lwjgl3ApplicationConfiguration cfg = new Lwjgl3ApplicationConfiguration();
 		cfg.setTitle("AsstPortoProj");
-		int width = 1800;
 		int height = 1200;
+		int width = (int) (height * (16/9f));
+
 		cfg.setWindowSizeLimits(width, height, width, height);
 		cfg.setWindowedMode(width, height);
 		cfg.setResizable(false);
-		cfg.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+		//cfg.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 
-		ApplicationListener game = SpringBeansManager.getBean(Game.class);
-		new Lwjgl3Application(game, cfg);
+		new Lwjgl3Application(SpringBeansManager.getBean(Game.class), cfg);
 	}
 
 }

@@ -46,7 +46,7 @@ public class PlayerPlugin implements IGamePluginService {
                 gameData.getDisplayHeight() / 2f,
                 (float) Math.PI / 2
         ));
-        player.add(new LifePart(1, 0));
+        player.add(new LifePart(3, 10_000_00));
         player.add(new WeaponPart(0.2f));
 
         return player;

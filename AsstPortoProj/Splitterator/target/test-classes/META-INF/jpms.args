@@ -1,0 +1,4 @@
+--patch-module
+Splitterator=_
+--add-reads
+Splitterator=ALL-UNNAMED

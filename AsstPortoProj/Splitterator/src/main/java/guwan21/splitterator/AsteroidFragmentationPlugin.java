@@ -26,7 +26,7 @@ public class AsteroidFragmentationPlugin implements IGamePluginService {
      * @param world Current world state
      * @param asteroid Asteroid that has been split
      */
-    protected void fracture(World world, Entity asteroid) {
+    protected Entity fracture(World world, Entity asteroid) {
 
         PositionPart positionPart = asteroid.getPart(PositionPart.class);
         MovingPart movingPart = asteroid.getPart(MovingPart.class);
@@ -39,7 +39,7 @@ public class AsteroidFragmentationPlugin implements IGamePluginService {
 
         constructor.build(fragment, positionPart.getX(), positionPart.getY(), radians, startSpeed,1);
 
-        world.addEntity(fragment);
-
+        System.out.println("Asteroid fractured");
+        return fragment;
     }
 }

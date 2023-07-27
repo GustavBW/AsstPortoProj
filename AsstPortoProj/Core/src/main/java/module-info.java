@@ -14,4 +14,5 @@ module Core {
 
     exports guwan21.components;
     exports guwan21.main;
+    exports guwan21.managers;
 }

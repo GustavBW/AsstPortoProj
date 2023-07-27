@@ -6,14 +6,22 @@ import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.services.IEntityPostProcessingService;
+import guwan21.common.services.IEntityProcessingService;
 
-public class AsteroidSplitteratorService implements IEntityPostProcessingService {
+public class AsteroidSplitteratorService implements IEntityProcessingService {
 
-    private final AsteroidFragmentationPlugin asteroidPlugin = new AsteroidFragmentationPlugin();
+    private AsteroidFragmentationPlugin asteroidPlugin = new AsteroidFragmentationPlugin();
+
+    public AsteroidSplitteratorService(){}
+    public AsteroidSplitteratorService(AsteroidFragmentationPlugin plugin){
+        this.asteroidPlugin = plugin;
+    }
+
+
     /**
      * For any Asteroid; split if hit
-     * Pre-condition: Any asteroid  and has a lifepart
-     * post-condition: Old instance is removed and 2 new, smaller instances added. If it has been hit.
+     * Pre-condition: Any asteroid and has a lifepart
+     * post-condition: A small fragment is added at the position of the damaged asteroid
      *
      * @param data Current game state
      * @param world Current world state
@@ -22,13 +30,11 @@ public class AsteroidSplitteratorService implements IEntityPostProcessingService
     public void process(GameData data, World world) {
         for(Entity asteroid : world.getEntities(Asteroid.class)){
 
-            LifePart lifePart = asteroid.getPart(LifePart.class);
-
-            if (lifePart.isHit() && !lifePart.isDead()) {
-                continue;
+            if (asteroid.getPart(LifePart.class).isHit()) {
+                world.addEntity(
+                        asteroidPlugin.fracture(world, asteroid)
+                );
             }
-
-            asteroidPlugin.fracture(world, asteroid);
         }
     }
 }

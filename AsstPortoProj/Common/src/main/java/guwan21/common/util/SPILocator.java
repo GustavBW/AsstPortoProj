@@ -1,42 +1,26 @@
 package guwan21.common.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ServiceConfigurationError;
-import java.util.ServiceLoader;
+import java.util.*;
 
 public class SPILocator {
 
-    private static final Map<Class<?>, ServiceLoader<?>> loadermap = new HashMap<>();
+    private static final Map<Class<?>, List<?>> serviceInstancesMap = new HashMap<>();
+
+    private record ClassBasedMapEntry<T>(Class<T> classKey, Collection<T> classInstanceValues){}
 
     private SPILocator() {
     }
-
-
+    @SuppressWarnings("unchecked")
     public static <T> List<T> locateAll(Class<T> clazz) {
-        ServiceLoader<?> loader = loadermap.get(clazz);
+        if (serviceInstancesMap.get(clazz) == null) {
+            ServiceLoader<T> loader = ServiceLoader.load(clazz);
 
-        if (loader == null) {
-            loader = ServiceLoader.load(clazz);
-            loadermap.put(clazz, loader);
+            List<T> asList = new ArrayList<>();
+            loader.forEach(asList::add);
+
+            serviceInstancesMap.put(clazz, asList);
+            return asList;
         }
-
-        List<T> list = new ArrayList<T>();
-
-        try {
-            for (Object instance : loader) {
-                try{
-                    @SuppressWarnings("unchecked")
-                    T duckTyped = (T) instance;
-                    list.add(duckTyped);
-                }catch (ClassCastException ignored){}
-            }
-        } catch (ServiceConfigurationError serviceError) {
-            serviceError.printStackTrace();
-        }
-
-        return list;
+        return (List<T>) serviceInstancesMap.get(clazz);
     }
 }

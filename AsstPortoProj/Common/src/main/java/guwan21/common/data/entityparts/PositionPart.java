@@ -13,7 +13,6 @@ public class PositionPart implements EntityPart {
         this.x = x;
         this.y = y;
         this.radians = radians;
-        this.radius = radius;
     }
 
     public float getX() {

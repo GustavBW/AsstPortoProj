@@ -17,13 +17,13 @@ public class PlayerProcessingService implements IEntityProcessingService {
     public void process(GameData data, World world) {
         for (Entity player : world.getEntities(Player.class)) {
 
-            MovingPart movingPart = player.getPart(MovingPart.class);
-            WeaponPart weaponPart = player.getPart(WeaponPart.class);
-
             if (player.getPart(LifePart.class).isDead()) {
                 world.removeEntity(player);
                 continue;
             }
+
+            MovingPart movingPart = player.getPart(MovingPart.class);
+            WeaponPart weaponPart = player.getPart(WeaponPart.class);
 
             movingPart.setLeft(data.getKeys().isDown(GameKeys.LEFT));
             movingPart.setRight(data.getKeys().isDown(GameKeys.RIGHT));

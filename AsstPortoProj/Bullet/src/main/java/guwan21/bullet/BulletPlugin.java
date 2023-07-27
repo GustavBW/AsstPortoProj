@@ -49,7 +49,7 @@ public class BulletPlugin implements IGamePluginService, IBulletCreator {
         bullet.setColor(new Color(1,1,1,1));
         bullet.add(new MovingPart(0,0,1000,5, projectileVelocity));
         bullet.add(new PositionPart(x, y, radians));
-        bullet.add(new LifePart(1, 10));
+        bullet.add(new LifePart(1, 3));
 
         return bullet;
     }

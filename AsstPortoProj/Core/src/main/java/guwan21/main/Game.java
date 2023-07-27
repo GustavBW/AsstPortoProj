@@ -5,14 +5,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import guwan21.common.data.Color;
-import guwan21.components.PluginLoader;
+import guwan21.common.data.*;
+import guwan21.common.factories.ITimeBasedEntityFactory;
+import guwan21.common.services.IEntityPostProcessingService;
+import guwan21.common.services.IEntityProcessingService;
+import guwan21.common.util.SPILocator;
+import guwan21.components.AutomatedFactoriesProcessingService;
+import guwan21.managers.PluginManagementService;
 import guwan21.components.EntityPostProcessingServicesRunner;
 import guwan21.components.EntityProcessingServicesRunner;
 import guwan21.managers.GameInputProcessor;
-import guwan21.common.data.Entity;
-import guwan21.common.data.GameData;
-import guwan21.common.data.World;
 import guwan21.managers.SpringBeansManager;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
@@ -24,7 +26,7 @@ public class Game
         implements ApplicationListener {
 
     private final LinkedHashMap<Class<?>, SpringBeansManager.VoidFunction<?>> onUpdateRun = new LinkedHashMap<>();
-    private final AnnotationConfigApplicationContext onUpdateContext = SpringBeansManager.getContextFor("guwan21.components");
+    private final AnnotationConfigApplicationContext cachedOnUpdateContext = SpringBeansManager.getContextFor("guwan21.components");
 
     private static OrthographicCamera cam;
     private ShapeRenderer sr;
@@ -49,9 +51,37 @@ public class Game
             new GameInputProcessor(data)
         );
 
-        SpringBeansManager.forAnyOf(PluginLoader.class, loader -> loader.startPlugins(data,world));
-        onUpdateRun.put(EntityProcessingServicesRunner.class, (SpringBeansManager.VoidFunction<EntityProcessingServicesRunner>) r -> r.process(data,world));
-        onUpdateRun.put(EntityPostProcessingServicesRunner.class, (SpringBeansManager.VoidFunction<EntityPostProcessingServicesRunner>) r -> r.process(data,world));
+        System.out.println("[GAME] Locating implementations of IEntityProcessingService, found: ...");
+        for(IEntityProcessingService proc : SPILocator.locateAll(IEntityProcessingService.class)){
+            System.out.println("   |- "+proc.getClass());
+        }
+        System.out.println("[GAME] Locating implementations of IEntityPostProcessingService, found: ...");
+        for(IEntityPostProcessingService proc : SPILocator.locateAll(IEntityPostProcessingService.class)){
+            System.out.println("   |- "+proc.getClass());
+        }
+        System.out.println("[GAME] Locating implementations of ITimeBasedEntityFactory, found ...");
+        for(ITimeBasedEntityFactory factory : SPILocator.locateAll(ITimeBasedEntityFactory.class)){
+            System.out.println("   |- "+factory.getClass());
+        }
+        System.out.println();
+        SpringBeansManager.forAnyOf(PluginManagementService.class,
+                loader -> {
+                    System.out.println("[GAME] Initializing plugins using: " + loader.getClass());
+                    loader.startPlugins(data, world);
+            }
+        );
+        onUpdateRun.put(
+                EntityProcessingServicesRunner.class,
+                (SpringBeansManager.VoidFunction<EntityProcessingServicesRunner>) r -> r.process(data,world)
+        );
+        onUpdateRun.put(
+                EntityPostProcessingServicesRunner.class,
+                (SpringBeansManager.VoidFunction<EntityPostProcessingServicesRunner>) r -> r.process(data,world)
+        );
+        onUpdateRun.put(
+                AutomatedFactoriesProcessingService.class,
+                (SpringBeansManager.VoidFunction<AutomatedFactoriesProcessingService>) r -> r.process(data,world)
+        );
     }
 
     @Override
@@ -65,8 +95,6 @@ public class Game
         update();
 
         draw();
-
-        data.getKeys().update();
     }
 
     private void updateCam(int width, int height) {
@@ -74,12 +102,15 @@ public class Game
         data.setDisplayHeight(height);
 
         cam = new OrthographicCamera(data.getDisplayWidth(), data.getDisplayHeight());
-        cam.translate((float) data.getDisplayWidth() / 2, (float) data.getDisplayHeight() / 2);
+        cam.translate((float) data.getDisplayWidth() * 0.5f, (float) data.getDisplayHeight() * 0.5f);
         cam.update();
     }
 
     private void update() {
-        SpringBeansManager.forAnyOfEither(onUpdateContext, onUpdateRun);
+        data.getKeys().update();
+        SpringBeansManager.forAnyOfEither(cachedOnUpdateContext, onUpdateRun);
+        //Instant exit
+        if(data.getKeys().isDown(GameKeys.ESCAPE)) dispose();
     }
 
     private void draw() {
@@ -119,7 +150,12 @@ public class Game
 
     @Override
     public void dispose() {
-        SpringBeansManager.forAnyOf(PluginLoader.class, loader -> loader.stopPlugins(data,world));
+        SpringBeansManager.forAnyOf(PluginManagementService.class, loader ->
+        {
+            System.out.println("[GAME] Disposing plugins using: " + loader.getClass());
+            loader.stopPlugins(data, world);
+        });
+        System.exit(0x7EE7);
     }
 
 }
