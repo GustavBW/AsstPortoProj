@@ -1,6 +1,6 @@
 package guwan21.common.services;
 
-import guwan21.common.data.Entity;
+import guwan21.common.data.entities.Entity;
 import guwan21.common.data.World;
 
 public interface IBulletCreator {

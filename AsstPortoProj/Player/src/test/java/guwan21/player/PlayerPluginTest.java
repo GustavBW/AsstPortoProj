@@ -2,6 +2,7 @@ package guwan21.player;
 
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
+import guwan21.common.data.entities.Player;
 import guwan21.common.services.IGamePluginService;
 import org.junit.jupiter.api.*;
 

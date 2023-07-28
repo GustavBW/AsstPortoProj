@@ -1,11 +1,10 @@
 package guwan21.splitterator;
 
-import guwan21.asteroid.Asteroid;
+import guwan21.common.data.entities.Asteroid;
 import guwan21.asteroid.AsteroidConstructor;
-import guwan21.common.data.Entity;
+import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
-import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.MovingPart;
 import guwan21.common.data.entityparts.PositionPart;
 import guwan21.common.services.IGamePluginService;

@@ -1,6 +1,6 @@
 package guwan21.common.data.entityparts;
 
-import guwan21.common.data.Entity;
+import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 
 public class WeaponPart implements  EntityPart {

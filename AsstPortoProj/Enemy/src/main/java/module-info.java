@@ -13,6 +13,6 @@ module Enemy {
     uses IBulletCreator;
 
     provides IGamePluginService with guwan21.enemy.EnemyPlugin;
-    provides IEntityProcessingService with EnemyProcessingService;
-    provides ITimeBasedEntityFactory with TimeBasedEnemyFactory;
+    provides IEntityProcessingService with guwan21.enemy.EnemyProcessingService;
+    provides ITimeBasedEntityFactory with guwan21.enemy.TimeBasedEnemyFactory;
 }

@@ -9,8 +9,20 @@ public class GameData {
 
     private float delta;
     private int displayWidth;
+
+    private double msFromGameStart;
     private int displayHeight;
     private final GameKeys keys = new GameKeys();
+
+
+    public double getMsFromGameStart() {
+        return msFromGameStart;
+    }
+
+    public void setMsFromGameStart(double msFromGameStart) {
+        this.msFromGameStart = msFromGameStart;
+    }
+
     private List<Event> events = new CopyOnWriteArrayList<>();
 
     public void addEvent(Event e) {

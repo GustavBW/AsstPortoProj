@@ -1,13 +1,9 @@
 package guwan21.enemy;
 
-import guwan21.common.data.Color;
-import guwan21.common.data.Entity;
+import guwan21.common.data.entities.Enemy;
+import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
-import guwan21.common.data.entityparts.LifePart;
-import guwan21.common.data.entityparts.MovingPart;
-import guwan21.common.data.entityparts.PositionPart;
-import guwan21.common.data.entityparts.WeaponPart;
 import guwan21.common.services.IGamePluginService;
 
 public class EnemyPlugin implements IGamePluginService {

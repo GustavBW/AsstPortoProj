@@ -1,6 +1,6 @@
 package guwan21.collision;
 
-import guwan21.common.data.Entity;
+import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;

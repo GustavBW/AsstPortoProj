@@ -1,7 +1,8 @@
 package guwan21.enemy;
 
 import guwan21.common.data.Color;
-import guwan21.common.data.Entity;
+import guwan21.common.data.entities.Enemy;
+import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
@@ -48,5 +49,39 @@ public class EnemyConstructor {
         pos.setY(pos.getY() * data.getDisplayHeight());
         return enemy;
     }
+
+    /**
+     * Update the shape of entity
+     * <br />
+     * Pre-condition: An entity that can be drawn, and a game tick has passed since last call for entity <br />
+     * Post-condition: Updated shape location for the entity
+     *
+     * @param entity Entity to update shape of
+     */
+    public void updateShape(Entity entity) {
+        float[] shapex = entity.getShapeX();
+        float[] shapey = entity.getShapeY();
+        PositionPart positionPart = entity.getPart(PositionPart.class);
+        float x = positionPart.getX();
+        float y = positionPart.getY();
+
+        float radians = positionPart.getRadians();
+        float radius = entity.getRadius();
+        float radAngleIncrement = (float) ((2 * Math.PI) / shapex.length);
+
+        for(int i = 0; i < shapex.length; i++){
+            float xProjection = (float) Math.cos(i * radAngleIncrement + radians);
+            float yProjection = (float) Math.sin(i * radAngleIncrement + radians);
+
+            float offset = baseShapeOffsets[i % 4];
+
+            shapex[i] = x + (offset * radius * xProjection);
+            shapey[i] = y + (offset * radius * yProjection);
+        }
+
+        entity.setShapeX(shapex);
+        entity.setShapeY(shapey);
+    }
+    private final float[] baseShapeOffsets = new float[]{0.33f, 0.705f,0.33f,1};
 
 }

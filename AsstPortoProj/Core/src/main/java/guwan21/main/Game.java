@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import guwan21.common.data.*;
+import guwan21.common.data.entities.Entity;
 import guwan21.common.factories.ITimeBasedEntityFactory;
 import guwan21.common.services.IEntityPostProcessingService;
 import guwan21.common.services.IEntityProcessingService;
 import guwan21.common.util.SPILocator;
 import guwan21.components.AutomatedFactoriesProcessingService;
+import guwan21.managers.IPluginManagementService;
 import guwan21.managers.PluginManagementService;
 import guwan21.components.EntityPostProcessingServicesRunner;
 import guwan21.components.EntityProcessingServicesRunner;
@@ -64,7 +66,7 @@ public class Game
             System.out.println("   |- "+factory.getClass());
         }
         System.out.println();
-        SpringBeansManager.forAnyOf(PluginManagementService.class,
+        SpringBeansManager.forAnyOf(IPluginManagementService.class,
                 loader -> {
                     System.out.println("[GAME] Initializing plugins using: " + loader.getClass());
                     loader.startPlugins(data, world);
@@ -90,8 +92,6 @@ public class Game
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        data.setDelta(Gdx.graphics.getDeltaTime());
-
         update();
 
         draw();
@@ -107,8 +107,12 @@ public class Game
     }
 
     private void update() {
+        final float delta = Gdx.graphics.getDeltaTime();
+        data.setDelta(delta);
+        data.setMsFromGameStart(data.getMsFromGameStart() + delta);
         data.getKeys().update();
         SpringBeansManager.forAnyOfEither(cachedOnUpdateContext, onUpdateRun);
+
         //Instant exit
         if(data.getKeys().isDown(GameKeys.ESCAPE)) dispose();
     }
@@ -150,12 +154,12 @@ public class Game
 
     @Override
     public void dispose() {
-        SpringBeansManager.forAnyOf(PluginManagementService.class, loader ->
+        SpringBeansManager.forAnyOf(IPluginManagementService.class, loader ->
         {
             System.out.println("[GAME] Disposing plugins using: " + loader.getClass());
             loader.stopPlugins(data, world);
         });
-        System.exit(0x7EE7);
+        Gdx.app.exit();
     }
 
 }

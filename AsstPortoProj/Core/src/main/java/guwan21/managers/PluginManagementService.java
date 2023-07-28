@@ -7,7 +7,7 @@ import guwan21.common.util.SPILocator;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PluginManagementService {
+public class PluginManagementService implements IPluginManagementService {
 
     public void startPlugins(GameData gameData, World world) {
         for (IGamePluginService plugin : SPILocator.locateAll(IGamePluginService.class)){

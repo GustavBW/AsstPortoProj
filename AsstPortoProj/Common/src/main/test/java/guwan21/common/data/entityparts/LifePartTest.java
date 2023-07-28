@@ -1,8 +1,7 @@
 package guwan21.common.data.entityparts;
 
-import guwan21.common.data.Entity;
+import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
-import guwan21.common.data.World;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

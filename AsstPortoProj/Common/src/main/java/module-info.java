@@ -10,6 +10,7 @@ module Common {
     exports guwan21.common.data.entityparts;
     exports guwan21.common.util;
     exports guwan21.common.factories;
+    exports guwan21.common.data.entities;
 
     uses IBulletCreator;
     uses IGamePluginService;

@@ -1,45 +1,157 @@
 package guwan21.common.data;
 
+import guwan21.common.data.entities.Asteroid;
+import guwan21.common.data.entities.Bullet;
+import guwan21.common.data.entities.Entity;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class WorldTest {
 
-    @Test
-    void addEntity() {
-    }
+    private final Entity mockEntity = mock(Entity.class);
 
     @Test
-    void removeEntity() {
+    void testAddEntity() {
+        World world = new World();
+        String entityId = "testId";
+
+        when(mockEntity.getID()).thenReturn(entityId);
+
+        String result = world.addEntity(mockEntity);
+
+        Collection<Entity> entitiesInWorld = world.getEntities();
+
+        assertEquals(entityId, result);
+        assertEquals(1,entitiesInWorld.size());
+        assertEquals(mockEntity, world.getEntity(entityId));
+
+        verify(mockEntity, times(1)).getID();
     }
 
     @Test
     void testRemoveEntity() {
-    }
+        World world = new World();
+        String entityId = "testId";
 
-    @Test
-    void getEntities() {
-        List<Entity> entityList = new LinkedList<>();
-        entityList.add(mock(Entity.class));
-        entityList.add(mock(Entity.class));
-        when(mock(World.class).getEntities()).thenReturn(entityList);
-    }
+        when(mockEntity.getID()).thenReturn(entityId);
+        world.addEntity(mockEntity); //Calls getID once
+        world.removeEntity(mockEntity); //Calls getID once more
 
-    @Test
-    void removeEntities() {
+        assertEquals(0, world.getEntities().size());
+        assertNull(world.getEntity(entityId));
+
+        verify(mockEntity, times(2)).getID();
     }
 
     @Test
     void testGetEntities() {
+        World world = new World();
+        String entityId = "testId";
+
+        when(mockEntity.getID()).thenReturn(entityId);
+
+        world.addEntity(mockEntity);
+
+        Collection<Entity> entities = world.getEntities();
+
+        assertEquals(1, entities.size());
+        assertEquals(mockEntity, entities.iterator().next());
+
+        verify(mockEntity, times(1)).getID();
     }
 
     @Test
-    void getEntity() {
+    void testRemoveEntities() {
+        World world = new World();
+
+        String entityId1 = "testId1";
+        String entityId2 = "testId2";
+        String entityId3 = "testId3";
+
+        Entity entity1 = mock(Entity.class);
+        Entity entity2 = mock(Entity.class);
+        Entity entity3 = mock(Entity.class);
+
+        when(entity1.getID()).thenReturn(entityId1);
+        when(entity2.getID()).thenReturn(entityId2);
+        when(entity3.getID()).thenReturn(entityId3);
+
+        world.addEntity(entity1);
+        world.addEntity(entity2);
+        world.addEntity(entity3);
+
+        // Assuming you want to remove all entities of a given type, let's say Entity.class
+        world.removeEntities(Entity.class);
+
+        assertEquals(0, world.getEntities().size());
+        assertNull(world.getEntity(entityId1));
+        assertNull(world.getEntity(entityId2));
+        assertNull(world.getEntity(entityId3));
+    }
+
+    @Test
+    void testGetEntitiesByClass() {
+        World world = new World();
+
+        String entityId1 = "testId1";
+        String entityId2 = "testId2";
+
+        Entity entity1 = mock(Entity.class);
+        Entity entity2 = mock(Entity.class);
+
+        when(entity1.getID()).thenReturn(entityId1);
+        when(entity2.getID()).thenReturn(entityId2);
+
+        world.addEntity(entity1);
+        world.addEntity(entity2);
+
+        List<Entity> entities = world.getEntities(Entity.class);
+
+        assertEquals(2, entities.size());
+        assertEquals(entity1, entities.get(0));
+        assertEquals(entity2, entities.get(1));
+    }
+
+    @Test
+    void testGetEntitiesByClassName() {
+        //Mockito cant mock getClass, so going JUnit for this one
+        World world = new World();
+        Asteroid asteroid = new Asteroid();
+        String asteroidId = asteroid.getID();
+        Bullet bullet = new Bullet();
+        String bulletId = bullet.getID();
+
+        world.addEntities(asteroid,bullet);
+
+        //When getting by the base class - Entity
+        List<Entity> entities = world.getEntities("Entity");
+        //An empty list should be returned
+        assertNotNull(entities);
+        assertEquals(0,entities.size());
+
+        //When getting by the class name "Asteroid"
+        List<Entity> asteroids = world.getEntities("Asteroid");
+        //A list of one item should be returned
+        assertNotNull(asteroids);
+        assertEquals(1,asteroids.size());
+        //And the id of that item should be asteroidsId
+        assertEquals(asteroidId, asteroids.get(0).getID());
+
+        //And likewise for Bullet
+
+        //When getting by the class name "Bullet"
+        List<Entity> bullets = world.getEntities("Bullet");
+        //A list of one item should be returned
+        assertNotNull(bullets);
+        assertEquals(1,bullets.size());
+        //And the id of that item should be asteroidsId
+        assertEquals(bulletId, bullets.get(0).getID());
     }
 }

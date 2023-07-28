@@ -1,11 +1,11 @@
-package guwan21.common.data;
+package guwan21.common.data.entities;
 
+import guwan21.common.data.Color;
 import guwan21.common.data.entityparts.EntityPart;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 

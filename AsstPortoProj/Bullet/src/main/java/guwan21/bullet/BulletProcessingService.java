@@ -1,6 +1,7 @@
 package guwan21.bullet;
 
-import guwan21.common.data.Entity;
+import guwan21.common.data.entities.Bullet;
+import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;

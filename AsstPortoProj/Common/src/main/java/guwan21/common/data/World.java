@@ -1,9 +1,8 @@
 package guwan21.common.data;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import guwan21.common.data.entities.Entity;
+
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -15,8 +14,9 @@ public class World {
     private final Map<String, Entity> entityMap = new ConcurrentHashMap<>();
 
     public String addEntity(Entity entity) {
-        entityMap.put(entity.getID(), entity);
-        return entity.getID();
+        String id = entity.getID();
+        entityMap.put(id, entity);
+        return id;
     }
 
     public void removeEntity(String entityID) {
@@ -39,6 +39,14 @@ public class World {
         }
     }
 
+    public List<String> addEntities(Entity... entities){
+        List<String> toReturn = new ArrayList<>();
+        for(Entity e : entities){
+            toReturn.add(addEntity(e));
+        }
+        return toReturn;
+    }
+
     @SafeVarargs
     public final <E extends Entity> List<Entity> getEntities(Class<E>... entityTypes) {
         List<Entity> r = new ArrayList<>();
@@ -48,6 +56,19 @@ public class World {
                     r.add(e);
                 }
             }
+        }
+        return r;
+    }
+
+    public List<Entity> getEntities(String className){
+        List<Entity> r = new ArrayList<>();
+        for (Entity e : getEntities()) {
+            String name = e.getClass().getName();
+            String nameWithoutPackage = name.substring(name.lastIndexOf(".") + 1);
+            if (className.equals(nameWithoutPackage)) {
+                r.add(e);
+            }
+
         }
         return r;
     }

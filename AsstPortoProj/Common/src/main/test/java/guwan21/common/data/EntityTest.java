@@ -1,5 +1,6 @@
 package guwan21.common.data;
 
+import guwan21.common.data.entities.Entity;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.PositionPart;
 import org.junit.jupiter.api.Test;

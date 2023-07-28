@@ -1,11 +1,10 @@
 package guwan21.splitterator;
 
-import guwan21.asteroid.Asteroid;
-import guwan21.common.data.Entity;
+import guwan21.common.data.entities.Asteroid;
+import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
-import guwan21.common.services.IEntityPostProcessingService;
 import guwan21.common.services.IEntityProcessingService;
 
 public class AsteroidSplitteratorService implements IEntityProcessingService {

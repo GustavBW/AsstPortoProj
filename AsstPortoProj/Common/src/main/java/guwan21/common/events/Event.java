@@ -1,6 +1,6 @@
 package guwan21.common.events;
 
-import guwan21.common.data.Entity;
+import guwan21.common.data.entities.Entity;
 import java.io.Serializable;
 
 public class Event implements Serializable{
