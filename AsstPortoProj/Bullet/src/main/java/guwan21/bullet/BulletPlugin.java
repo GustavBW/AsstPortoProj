@@ -10,27 +10,29 @@ import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.MovingPart;
 import guwan21.common.data.entityparts.PositionPart;
 import guwan21.common.services.IBulletCreator;
+import guwan21.common.services.IEntityConstructionService;
 import guwan21.common.services.IGamePluginService;
+import guwan21.common.util.EntityConstructionServiceRegistry;
+import guwan21.common.util.SPILocator;
 
 public class BulletPlugin implements IGamePluginService, IBulletCreator {
+
+    IEntityConstructionService bulletConstructor = EntityConstructionServiceRegistry.getFor(Bullet.class);
 
     @Override
     public void start(GameData data, World world) {
 
     }
 
-    /**
-     * Create bullet entity with default parameters based on shooter
-     * <br />
-     * Pre-condition: New bullet entity has to be created for the game from a shooter <br />
-     * Post-condition: Bullet entity, that has parameters, such that it is shot from shooter
-     *
-     * @return Bullet entity with initial data from shooter
-     */
-    private Entity create(Entity shotOrigin) {
-        Entity bullet = new Bullet();
+    @Override
+    public void stop(GameData data, World world) {
+        world.removeEntities(Bullet.class);
+    }
 
-        bullet.setRadius(1);
+    @Override
+    public void fire(Entity shotOrigin, World world) {
+        Entity bullet = bulletConstructor.create();
+
         PositionPart soPosition = shotOrigin.getPart(PositionPart.class);
         final float radians = soPosition.getRadians();
         final float radius = shotOrigin.getRadius();
@@ -45,24 +47,13 @@ public class BulletPlugin implements IGamePluginService, IBulletCreator {
         float y = by + soPosition.getY() + dy;
         float projectileVelocity = 350 + (soMovePart.getSpeed());
 
-        bullet.setShapeX(new float[4]);
-        bullet.setShapeY(new float[4]);
-        bullet.setColor(new Color(1,1,1,1));
-        bullet.add(new MovingPart(0,0,1000,5, projectileVelocity));
-        bullet.add(new PositionPart(x, y, radians));
-        bullet.add(new LifePart(1, 3));
+        bulletConstructor.configure(
+                bullet,
+                new MovingPart(0,0,1000,5,projectileVelocity),
+                new PositionPart(x, y, radians),
+                new LifePart(1,3)
+        );
 
-        return bullet;
-    }
-
-    @Override
-    public void stop(GameData data, World world) {
-        world.removeEntities(Bullet.class);
-    }
-
-    @Override
-    public void fire(Entity shotOrigin, World world) {
-        Entity bullet = this.create(shotOrigin);
         world.addEntity(bullet);
     }
 }

@@ -32,27 +32,7 @@ public class BulletProcessingService implements IEntityProcessingService {
      * @param entity Entity to update shape of
      */
     private void updateShape(Entity entity) {
-        float[] shapeX = entity.getShapeX();
-        float[] shapeY = entity.getShapeY();
-        PositionPart positionPart = entity.getPart(PositionPart.class);
-        float x = positionPart.getX();
-        float y = positionPart.getY();
-        float radians = positionPart.getRadians();
 
-        shapeX[0] = (float) (x + Math.cos(radians) * 1);
-        shapeY[0] = (float) (y + Math.sin(radians) * 1);
-
-        shapeX[1] = (float) (x + Math.cos(radians) * 0);
-        shapeY[1] = (float) (y + Math.sin(radians) * 0);
-
-        shapeX[2] = (float) (x + Math.cos(radians) * 2);
-        shapeY[2] = (float) (y + Math.sin(radians) * 2);
-
-        shapeX[3] = (float) (x + Math.cos(radians) * -2);
-        shapeY[3] = (float) (y + Math.sin(radians) * -2);
-
-        entity.setShapeX(shapeX);
-        entity.setShapeY(shapeY);
     }
 }
 

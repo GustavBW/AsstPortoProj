@@ -5,20 +5,22 @@ import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.factories.ITimeBasedEntityFactory;
 import guwan21.common.util.SPILocator;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
+@Component
 public class AutomatedFactoriesProcessingService implements IProcessor {
 
     private final Map<ITimeBasedEntityFactory,Long> factoryNextInvocationTimestampMap = new HashMap<>();
 
     @Override
     public void process(GameData data, World world) {
-        for(ITimeBasedEntityFactory factory : SPILocator.locateAll(ITimeBasedEntityFactory.class)){
-            if(factoryNextInvocationTimestampMap.get(factory) == null || factoryNextInvocationTimestampMap.get(factory) <= System.currentTimeMillis()){
+        for(ITimeBasedEntityFactory factory : SPILocator.locateBeans(ITimeBasedEntityFactory.class)){
+            Long timestamp = factoryNextInvocationTimestampMap.get(factory);
+            if(timestamp == null || timestamp <= System.currentTimeMillis()){
                 Entity entity = invokeFactory(factory,data,world);
                 updateTimestampsFor(factory);
                 world.addEntity(entity);

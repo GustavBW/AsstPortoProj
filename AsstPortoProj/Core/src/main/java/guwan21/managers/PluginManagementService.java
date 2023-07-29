@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 public class PluginManagementService implements IPluginManagementService {
 
     public void startPlugins(GameData gameData, World world) {
-        for (IGamePluginService plugin : SPILocator.locateAll(IGamePluginService.class)){
+        for (IGamePluginService plugin : SPILocator.locateBeans(IGamePluginService.class)){
             plugin.start(gameData,world);
             System.out.println("\t[PluginLoader] started plugin: " + plugin.getClass());
         }
     }
 
     public void stopPlugins(GameData data, World world){
-        for(IGamePluginService plugin : SPILocator.locateAll(IGamePluginService.class)){
+        for(IGamePluginService plugin : SPILocator.locateBeans(IGamePluginService.class)){
             plugin.stop(data, world);
             System.out.println("\t[PluginLoader] stopped plugin: " + plugin.getClass());
         }

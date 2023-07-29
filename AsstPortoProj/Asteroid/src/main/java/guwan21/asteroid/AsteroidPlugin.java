@@ -10,7 +10,7 @@ import guwan21.common.services.IGamePluginService;
 
 public class AsteroidPlugin implements IGamePluginService {
 
-    private final AsteroidConstructor constructor = new AsteroidConstructor();
+    private final AsteroidConstructionService constructor = new AsteroidConstructionService();
 
     public AsteroidPlugin() {
     }

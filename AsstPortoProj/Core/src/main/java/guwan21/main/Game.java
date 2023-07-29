@@ -12,8 +12,8 @@ import guwan21.common.services.IEntityPostProcessingService;
 import guwan21.common.services.IEntityProcessingService;
 import guwan21.common.util.SPILocator;
 import guwan21.components.AutomatedFactoriesProcessingService;
+import guwan21.components.EntityPreProcessingServicesRunner;
 import guwan21.managers.IPluginManagementService;
-import guwan21.managers.PluginManagementService;
 import guwan21.components.EntityPostProcessingServicesRunner;
 import guwan21.components.EntityProcessingServicesRunner;
 import guwan21.managers.GameInputProcessor;
@@ -24,8 +24,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
-public class Game
-        implements ApplicationListener {
+public class Game implements ApplicationListener {
 
     private final LinkedHashMap<Class<?>, SpringBeansManager.VoidFunction<?>> onUpdateRun = new LinkedHashMap<>();
     private final AnnotationConfigApplicationContext cachedOnUpdateContext = SpringBeansManager.getContextFor("guwan21.components");
@@ -54,15 +53,15 @@ public class Game
         );
 
         System.out.println("[GAME] Locating implementations of IEntityProcessingService, found: ...");
-        for(IEntityProcessingService proc : SPILocator.locateAll(IEntityProcessingService.class)){
+        for(IEntityProcessingService proc : SPILocator.locateBeans(IEntityProcessingService.class)){
             System.out.println("   |- "+proc.getClass());
         }
         System.out.println("[GAME] Locating implementations of IEntityPostProcessingService, found: ...");
-        for(IEntityPostProcessingService proc : SPILocator.locateAll(IEntityPostProcessingService.class)){
+        for(IEntityPostProcessingService proc : SPILocator.locateBeans(IEntityPostProcessingService.class)){
             System.out.println("   |- "+proc.getClass());
         }
         System.out.println("[GAME] Locating implementations of ITimeBasedEntityFactory, found ...");
-        for(ITimeBasedEntityFactory factory : SPILocator.locateAll(ITimeBasedEntityFactory.class)){
+        for(ITimeBasedEntityFactory factory : SPILocator.locateBeans(ITimeBasedEntityFactory.class)){
             System.out.println("   |- "+factory.getClass());
         }
         System.out.println();
@@ -71,6 +70,10 @@ public class Game
                     System.out.println("[GAME] Initializing plugins using: " + loader.getClass());
                     loader.startPlugins(data, world);
             }
+        );
+        onUpdateRun.put(
+                EntityPreProcessingServicesRunner.class,
+                (SpringBeansManager.VoidFunction<EntityPreProcessingServicesRunner>) r -> r.process(data,world)
         );
         onUpdateRun.put(
                 EntityProcessingServicesRunner.class,

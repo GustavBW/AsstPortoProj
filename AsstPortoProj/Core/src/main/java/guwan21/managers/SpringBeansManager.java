@@ -6,6 +6,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Static Spring Beans utility.
+ * Allows for easy lookups, scans, and functional patterns.
+ * @author GustavBW
+ */
 public class SpringBeansManager {
 
     @FunctionalInterface
@@ -43,20 +48,20 @@ public class SpringBeansManager {
     }
 
     /**
-     * May throw NullPointerException if there is no function for a given class
-     * @param context
-     * @param functions
+     * For any of either class in the key set of the map (preserves order), try and execute the function provided as its value (empty if null)
+     * with a bean provided by the context. May throw a BeansException.
+     * @param context Spring AnnotationConfigApplicationContext
+     * @param functions Map of classes and functions
      */
     @SuppressWarnings("unchecked")
     public static void forAnyOfEither(AnnotationConfigApplicationContext context, LinkedHashMap<Class<?>, VoidFunction<?>> functions){
         for(Class<?> clazz : functions.keySet()){
             try{
                 @SuppressWarnings("rawtypes")
-                VoidFunction func = functions.get(clazz);
+                VoidFunction func = functions.getOrDefault(clazz, k -> {}); //Empty function if null
                 func.run(context.getBean(clazz));
-            }catch (ClassCastException | IllegalArgumentException | NullPointerException ignored){
+            }catch (ClassCastException | IllegalArgumentException ignored){
                 System.out.println("Unable to run provided / empty function for class: " + clazz.toString());
-                ignored.printStackTrace();
             }
         }
     }

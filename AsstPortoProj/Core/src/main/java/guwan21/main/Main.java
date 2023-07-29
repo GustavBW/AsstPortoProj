@@ -22,9 +22,12 @@ public class Main {
 		cfg.setWindowSizeLimits(width, height, width, height);
 		cfg.setWindowedMode(width, height);
 		cfg.setResizable(false);
-		//cfg.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 
-		new Lwjgl3Application(SpringBeansManager.getBean(Game.class), cfg);
+		new Lwjgl3Application(
+				//Locate any present implementation of the ApplicationListener interface in this package.
+				SpringBeansManager.getBean("guwan21.main",ApplicationListener.class),
+				cfg
+		);
 	}
 
 }

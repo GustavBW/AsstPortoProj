@@ -1,15 +1,18 @@
 package guwan21.enemy;
 
+import guwan21.common.data.entities.Enemy;
 import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.factories.ITimeBasedEntityFactory;
+import guwan21.common.services.IEntityConstructionService;
+import guwan21.common.util.EntityConstructionServiceRegistry;
 import guwan21.common.util.Sigmoid;
 
 public class TimeBasedEnemyFactory implements ITimeBasedEntityFactory {
 
     private double currentTimeout = 5000;
-    private final EnemyConstructor constructor = new EnemyConstructor();
+    private final IEntityConstructionService constructor = EntityConstructionServiceRegistry.getFor(Enemy.class);
 
     @Override
     public Entity produce() {
@@ -25,7 +28,7 @@ public class TimeBasedEnemyFactory implements ITimeBasedEntityFactory {
                 .02f,
                 200
         );
-        return constructor.adjust(instance,data,world);
+        return constructor.adaptTo(instance,data,world);
     }
 
     @Override

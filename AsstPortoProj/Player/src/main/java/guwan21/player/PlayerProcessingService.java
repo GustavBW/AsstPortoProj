@@ -34,7 +34,7 @@ public class PlayerProcessingService implements IEntityProcessingService {
 
             weaponPart.setFiring(data.getKeys().isDown(GameKeys.SPACE));
             if (weaponPart.isFiring()) {
-                SPILocator.locateAll(IBulletCreator.class).forEach(bc -> bc.fire(player,world));
+                SPILocator.locateBeans(IBulletCreator.class).forEach(bc -> bc.fire(player,world));
             }
 
             updateShape(player);

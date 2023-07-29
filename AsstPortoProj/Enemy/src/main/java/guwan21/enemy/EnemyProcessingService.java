@@ -15,7 +15,7 @@ import guwan21.common.util.SPILocator;
 
 public class EnemyProcessingService implements IEntityProcessingService {
 
-    private final EnemyConstructor constructor = new EnemyConstructor();
+    private final EnemyConstructionService constructor = new EnemyConstructionService();
 
     @Override
     public void process(GameData data, World world) {
@@ -47,7 +47,7 @@ public class EnemyProcessingService implements IEntityProcessingService {
 
             weaponPart.setFiring(true);
             if (weaponPart.isFiring()) {
-                SPILocator.locateAll(IBulletCreator.class).forEach(bc -> bc.fire(enemy,world));
+                SPILocator.locateBeans(IBulletCreator.class).forEach(bc -> bc.fire(enemy,world));
             }
 
         }

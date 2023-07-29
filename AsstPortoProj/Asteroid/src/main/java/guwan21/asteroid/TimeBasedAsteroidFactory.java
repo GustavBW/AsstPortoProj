@@ -1,14 +1,18 @@
 package guwan21.asteroid;
 
+import guwan21.common.data.entities.Asteroid;
 import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.factories.ITimeBasedEntityFactory;
+import guwan21.common.services.IEntityConstructionService;
+import guwan21.common.util.EntityConstructionServiceRegistry;
 import guwan21.common.util.Sigmoid;
 
 public class TimeBasedAsteroidFactory implements ITimeBasedEntityFactory {
 
-    private final AsteroidConstructor constructor = new AsteroidConstructor();
+    private final IEntityConstructionService constructor = EntityConstructionServiceRegistry.getFor(Asteroid.class);
+
     private double currentTimeout = 5000;
 
     @Override
@@ -30,7 +34,7 @@ public class TimeBasedAsteroidFactory implements ITimeBasedEntityFactory {
                 .02f,
                 200
         );
-        return constructor.adaptTo(instance, data,world);
+        return constructor.adaptTo(instance, data, world);
     }
 
 }

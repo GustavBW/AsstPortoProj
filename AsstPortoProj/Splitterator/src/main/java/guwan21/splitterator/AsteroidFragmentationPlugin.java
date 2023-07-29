@@ -1,7 +1,7 @@
 package guwan21.splitterator;
 
 import guwan21.common.data.entities.Asteroid;
-import guwan21.asteroid.AsteroidConstructor;
+import guwan21.asteroid.AsteroidConstructionService;
 import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
@@ -11,7 +11,7 @@ import guwan21.common.services.IGamePluginService;
 
 public class AsteroidFragmentationPlugin implements IGamePluginService {
 
-    private final AsteroidConstructor constructor = new AsteroidConstructor();
+    private final AsteroidConstructionService constructor = new AsteroidConstructionService();
 
     @Override
     public void start(GameData data, World world) {}

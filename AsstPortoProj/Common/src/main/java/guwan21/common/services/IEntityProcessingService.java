@@ -5,9 +5,9 @@ import guwan21.common.data.World;
 
 public interface IEntityProcessingService {
     /**
-     * Processes entities.
+     * Main entity processing-pass.
      * Pre-condition: A game tick has passed since last call.
-     * Post-condition: The entity has been processed and updated.
+     * Post-condition: All entities processed and scene graph updated.
      * 
      * @param data Current game state information
      * @param world Current world state
