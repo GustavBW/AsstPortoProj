@@ -5,10 +5,9 @@ import guwan21.common.data.World;
 import guwan21.common.services.IEntityPreProcessingService;
 import guwan21.common.util.SPILocator;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
-public class EntityPreProcessingServicesRunner implements IProcessor{
+public class EntityPreProcessingServicesRunner implements IEntityPreProcessingServicesRunner {
     @Override
     public void process(GameData data, World world) {
         for(IEntityPreProcessingService proc : SPILocator.locateBeans(IEntityPreProcessingService.class)){

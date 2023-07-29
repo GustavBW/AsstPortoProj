@@ -21,8 +21,6 @@ public class EnemyPlugin implements IGamePluginService {
         world.addEntity(entity);
     }
 
-
-
     @Override
     public void stop(GameData data, World world) {
         // Remove entities

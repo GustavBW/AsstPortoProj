@@ -94,13 +94,9 @@ class CollisionDetectorTest {
                 1,
                 "2"
         );
-
         collisionDetector.process(data, world);
-
         verify(lifepart, never()).setIsHit(anyBoolean());
     }
-
-
 
     @Test
     void shouldHitOnPosition() {
@@ -150,7 +146,6 @@ class CollisionDetectorTest {
         assertTrue(collisionDetector.withinBounds(0, 0, 6, 10, 0, 6));
         assertTrue(collisionDetector.withinBounds(0, 0, 5.000001f, 10, 0, 5.000001f));
         assertTrue(collisionDetector.withinBounds(0, 0, 10, 10, 10, 10));
-
         assertFalse(collisionDetector.withinBounds(0, 0, 5, 10, 0, 4));
         assertFalse(collisionDetector.withinBounds(0, 0, 5, 10, 10, 5));
     }

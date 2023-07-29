@@ -100,10 +100,9 @@ class EntityConstructionServiceRegistryTest {
         constructionServices.put(Asteroid.class, asteroidConstructor);
 
         //Overwrite the map
-        EntityConstructionServiceRegistry registry = new EntityConstructionServiceRegistry(constructionServices);
+        EntityConstructionServiceRegistry.overwriteMap(constructionServices);
         //If I request a construction service for the bullet class, it should return the bulletConstructor instance
         assertEquals(bulletConstructor,EntityConstructionServiceRegistry.getFor(Bullet.class));
         assertEquals(asteroidConstructor,EntityConstructionServiceRegistry.getFor(Asteroid.class));
-
     }
 }

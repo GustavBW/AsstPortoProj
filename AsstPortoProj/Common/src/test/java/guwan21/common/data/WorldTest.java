@@ -4,10 +4,8 @@ import guwan21.common.data.entities.Asteroid;
 import guwan21.common.data.entities.Bullet;
 import guwan21.common.data.entities.Entity;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,24 +13,24 @@ import static org.mockito.Mockito.*;
 
 class WorldTest {
 
-    private final Entity mockEntity = mock(Entity.class);
+    private final Entity entity = mock(Entity.class);
 
     @Test
     void testAddEntity() {
         World world = new World();
         String entityId = "testId";
 
-        when(mockEntity.getID()).thenReturn(entityId);
+        when(entity.getID()).thenReturn(entityId);
 
-        String result = world.addEntity(mockEntity);
+        String result = world.addEntity(entity);
 
         Collection<Entity> entitiesInWorld = world.getEntities();
 
         assertEquals(entityId, result);
         assertEquals(1,entitiesInWorld.size());
-        assertEquals(mockEntity, world.getEntity(entityId));
+        assertEquals(entity, world.getEntity(entityId));
 
-        verify(mockEntity, times(1)).getID();
+        verify(entity, times(1)).getID();
     }
 
     @Test
@@ -40,14 +38,14 @@ class WorldTest {
         World world = new World();
         String entityId = "testId";
 
-        when(mockEntity.getID()).thenReturn(entityId);
-        world.addEntity(mockEntity); //Calls getID once
-        world.removeEntity(mockEntity); //Calls getID once more
+        when(entity.getID()).thenReturn(entityId);
+        world.addEntity(entity); //Calls getID once
+        world.removeEntity(entity); //Calls getID once more
 
         assertEquals(0, world.getEntities().size());
         assertNull(world.getEntity(entityId));
 
-        verify(mockEntity, times(2)).getID();
+        verify(entity, times(2)).getID();
     }
 
     @Test
@@ -55,16 +53,12 @@ class WorldTest {
         World world = new World();
         String entityId = "testId";
 
-        when(mockEntity.getID()).thenReturn(entityId);
-
-        world.addEntity(mockEntity);
-
+        when(entity.getID()).thenReturn(entityId);
+        world.addEntity(entity);
         Collection<Entity> entities = world.getEntities();
-
         assertEquals(1, entities.size());
-        assertEquals(mockEntity, entities.iterator().next());
-
-        verify(mockEntity, times(1)).getID();
+        assertEquals(entity, entities.iterator().next());
+        verify(entity, times(1)).getID();
     }
 
     @Test

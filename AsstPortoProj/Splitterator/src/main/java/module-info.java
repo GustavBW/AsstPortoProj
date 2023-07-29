@@ -5,7 +5,6 @@ import guwan21.splitterator.AsteroidSplitteratorService;
 
 module Splitterator {
     requires Common;
-    requires Asteroid;
 
     provides IEntityPreProcessingService with AsteroidSplitteratorService;
     provides IGamePluginService with AsteroidFragmentationPlugin;

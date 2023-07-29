@@ -6,7 +6,6 @@ import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.services.IEntityPreProcessingService;
-import guwan21.common.services.IEntityProcessingService;
 
 public class AsteroidSplitteratorService implements IEntityPreProcessingService {
 

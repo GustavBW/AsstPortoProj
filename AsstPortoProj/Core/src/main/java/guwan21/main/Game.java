@@ -12,11 +12,8 @@ import guwan21.common.services.IEntityPostProcessingService;
 import guwan21.common.services.IEntityPreProcessingService;
 import guwan21.common.services.IEntityProcessingService;
 import guwan21.common.util.SPILocator;
-import guwan21.components.AutomatedFactoriesProcessingService;
-import guwan21.components.EntityPreProcessingServicesRunner;
+import guwan21.components.*;
 import guwan21.managers.IPluginManagementService;
-import guwan21.components.EntityPostProcessingServicesRunner;
-import guwan21.components.EntityProcessingServicesRunner;
 import guwan21.managers.GameInputProcessor;
 import guwan21.managers.SpringBeansManager;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -69,27 +66,29 @@ public class Game implements ApplicationListener {
             System.out.println("   |- "+factory.getClass());
         }
         System.out.println();
+
         SpringBeansManager.forAnyOf(IPluginManagementService.class,
                 loader -> {
                     System.out.println("[GAME] Initializing plugins using: " + loader.getClass());
                     loader.startPlugins(data, world);
             }
         );
+        //Executed in order of declaration, see SpringBeansManager.forAnyOfEither
         onUpdateRun.put(
-                EntityPreProcessingServicesRunner.class,
-                (SpringBeansManager.VoidFunction<EntityPreProcessingServicesRunner>) r -> r.process(data,world)
+                IEntityPreProcessingServicesRunner.class,
+                (SpringBeansManager.VoidFunction<IEntityPreProcessingServicesRunner>) r -> r.process(data,world)
         );
         onUpdateRun.put(
-                EntityProcessingServicesRunner.class,
-                (SpringBeansManager.VoidFunction<EntityProcessingServicesRunner>) r -> r.process(data,world)
+                IEntityProcessingServicesRunner.class,
+                (SpringBeansManager.VoidFunction<IEntityProcessingServicesRunner>) r -> r.process(data,world)
         );
         onUpdateRun.put(
-                EntityPostProcessingServicesRunner.class,
-                (SpringBeansManager.VoidFunction<EntityPostProcessingServicesRunner>) r -> r.process(data,world)
+                IEntityPostProcessingServicesRunner.class,
+                (SpringBeansManager.VoidFunction<IEntityPostProcessingServicesRunner>) r -> r.process(data,world)
         );
         onUpdateRun.put(
-                AutomatedFactoriesProcessingService.class,
-                (SpringBeansManager.VoidFunction<AutomatedFactoriesProcessingService>) r -> r.process(data,world)
+                ITimeBasedFactoriesProcessingService.class,
+                (SpringBeansManager.VoidFunction<ITimeBasedFactoriesProcessingService>) r -> r.process(data,world)
         );
     }
 
@@ -118,6 +117,7 @@ public class Game implements ApplicationListener {
         data.setDelta(delta);
         data.setMsFromGameStart(data.getMsFromGameStart() + delta);
         data.getKeys().update();
+
         SpringBeansManager.forAnyOfEither(cachedOnUpdateContext, onUpdateRun);
 
         //Instant exit
@@ -161,6 +161,7 @@ public class Game implements ApplicationListener {
 
     @Override
     public void dispose() {
+        System.out.println("[GAME] exiting...");
         SpringBeansManager.forAnyOf(IPluginManagementService.class, loader ->
         {
             System.out.println("[GAME] Disposing plugins using: " + loader.getClass());

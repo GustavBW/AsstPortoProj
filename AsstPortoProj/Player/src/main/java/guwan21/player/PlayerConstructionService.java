@@ -19,10 +19,10 @@ public class PlayerConstructionService implements IEntityConstructionService {
         player.setRadius(8);
 
         player.add(new MovingPart(
-                10,
+                50,
+                150,
                 200,
-                300,
-                15,
+                10,
                 0
         ));
         player.add(new PositionPart(.5f, .5f, (float) Math.PI / 2));

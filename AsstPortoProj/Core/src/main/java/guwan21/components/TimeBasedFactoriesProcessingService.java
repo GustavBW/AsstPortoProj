@@ -6,13 +6,12 @@ import guwan21.common.data.World;
 import guwan21.common.factories.ITimeBasedEntityFactory;
 import guwan21.common.util.SPILocator;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class AutomatedFactoriesProcessingService implements IProcessor {
+public class TimeBasedFactoriesProcessingService implements ITimeBasedFactoriesProcessingService {
 
     private final Map<ITimeBasedEntityFactory,Long> factoryNextInvocationTimestampMap = new HashMap<>();
 

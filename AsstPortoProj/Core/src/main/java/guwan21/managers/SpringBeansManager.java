@@ -61,7 +61,7 @@ public class SpringBeansManager {
                 VoidFunction func = functions.getOrDefault(clazz, k -> {}); //Empty function if null
                 func.run(context.getBean(clazz));
             }catch (ClassCastException | IllegalArgumentException ignored){
-                System.out.println("Unable to run provided / empty function for class: " + clazz.toString());
+                System.out.println("Unable to run provided / empty function for class: " + clazz.toString() + " during Game update cycle.");
             }
         }
     }

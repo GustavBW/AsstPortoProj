@@ -1,17 +1,8 @@
-import guwan21.asteroid.AsteroidConstructionService;
-import guwan21.asteroid.AsteroidProcessingService;
-import guwan21.asteroid.TimeBasedAsteroidFactory;
-import guwan21.common.services.IEntityConstructionService;
-import guwan21.common.services.IEntityProcessingService;
-import guwan21.common.services.IGamePluginService;
-import guwan21.common.factories.ITimeBasedEntityFactory;
-
 module Asteroid {
-    exports guwan21.asteroid;
     requires Common;
 
-    provides IGamePluginService with guwan21.asteroid.AsteroidPlugin;
-    provides IEntityProcessingService with AsteroidProcessingService;
-    provides ITimeBasedEntityFactory with TimeBasedAsteroidFactory;
-    provides IEntityConstructionService with AsteroidConstructionService;
+    provides guwan21.common.services.IGamePluginService with guwan21.asteroid.AsteroidPlugin;
+    provides guwan21.common.services.IEntityProcessingService with guwan21.asteroid.AsteroidProcessingService;
+    provides guwan21.common.factories.ITimeBasedEntityFactory with guwan21.asteroid.TimeBasedAsteroidFactory;
+    provides guwan21.common.services.IEntityConstructionService with guwan21.asteroid.AsteroidConstructionService;
 }

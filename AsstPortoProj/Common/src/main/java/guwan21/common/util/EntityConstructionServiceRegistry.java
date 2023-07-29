@@ -17,11 +17,6 @@ public class EntityConstructionServiceRegistry {
 
     private static Map<Class<?>, IEntityConstructionService> constructionServices = new ConcurrentHashMap<>();
 
-    public EntityConstructionServiceRegistry(){}
-    public EntityConstructionServiceRegistry(Map<Class<?>, IEntityConstructionService> overwrite){
-        constructionServices = overwrite;
-    }
-
     /**
      * Searches for a IEntityConstructionService producing the right entity subtype, instances it, caches the instance and returns it.
      * If no service is available, it will return null.
@@ -37,6 +32,12 @@ public class EntityConstructionServiceRegistry {
                     .findFirst()
                     .orElse(null)
         );
+    }
+
+
+    //Package private, as this is for testing purposes
+    static void overwriteMap(Map<Class<?>, IEntityConstructionService> overwrite){
+        constructionServices = overwrite;
     }
 
 }
