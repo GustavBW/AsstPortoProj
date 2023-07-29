@@ -51,16 +51,12 @@ public class LifePart implements EntityPart {
     @Override
     public void process(GameData gameData, Entity entity) {
         reduceExpiration(gameData.getDelta());
-        if(expiration <= 0){
+        if(expiration <= 0 || this.life <= 0){
             this.dead = true;
-            return;
         }
         if (this.isHit) {
             this.life -= 1;
             this.isHit = false;
-        }
-        if (this.life <= 0) {
-            this.dead = true;
         }
     }
 }

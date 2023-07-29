@@ -1,8 +1,5 @@
 import guwan21.common.factories.ITimeBasedEntityFactory;
-import guwan21.common.services.IBulletCreator;
-import guwan21.common.services.IEntityProcessingService;
-import guwan21.common.services.IGamePluginService;
-import guwan21.common.services.IEntityPostProcessingService;
+import guwan21.common.services.*;
 
 module Common {
     exports guwan21.common.services;
@@ -17,4 +14,5 @@ module Common {
     uses IEntityProcessingService;
     uses IEntityPostProcessingService;
     uses ITimeBasedEntityFactory;
+    uses IEntityConstructionService;
 }

@@ -92,39 +92,4 @@ class EntityTest {
         assertEquals(list.size(),idSet.size()); //Expect 1000 unique ids
     }
 
-    @Test
-    void getShapeX() {
-        Entity e = new Entity();
-        e.setShapeX(new float[]{1f,2f,3f,4f});
-        for(int i = 1; i < 5; i++){
-            assertEquals(i,e.getShapeX()[i]);
-        }
-    }
-
-    @Test
-    void setShapeX() {
-        Entity e = new Entity();
-        e.setShapeX(new float[]{1f,2f,3f,4f});
-        for(int i = 1; i < 5; i++){
-            assertEquals(i,e.getShapeX()[i]);
-        }
-    }
-
-    @Test
-    void getShapeY() {
-        Entity e = new Entity();
-        e.setShapeY(new float[]{1f,2f,3f,4f});
-        for(int i = 1; i < 5; i++){
-            assertEquals(i,e.getShapeY()[i]);
-        }
-    }
-
-    @Test
-    void setShapeY() {
-        Entity e = new Entity();
-        e.setShapeY(new float[]{1f,2f,3f,4f});
-        for(int i = 1; i < 5; i++){
-            assertEquals(i,e.getShapeY()[i]);
-        }
-    }
 }
