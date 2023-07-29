@@ -1,17 +1,19 @@
 package guwan21.splitterator;
 
 import guwan21.common.data.entities.Asteroid;
-import guwan21.asteroid.AsteroidConstructionService;
 import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
+import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.MovingPart;
 import guwan21.common.data.entityparts.PositionPart;
+import guwan21.common.services.IEntityConstructionService;
 import guwan21.common.services.IGamePluginService;
+import guwan21.common.util.EntityConstructionServiceRegistry;
 
 public class AsteroidFragmentationPlugin implements IGamePluginService {
 
-    private final AsteroidConstructionService constructor = new AsteroidConstructionService();
+    private final IEntityConstructionService constructor = EntityConstructionServiceRegistry.getFor(Asteroid.class);
 
     @Override
     public void start(GameData data, World world) {}
@@ -23,20 +25,20 @@ public class AsteroidFragmentationPlugin implements IGamePluginService {
      * Pre-condition: An asteroid has been hit. Oh no!
      * Post-condition: Fragment added to world based on original asteroid.
      * @param world Current world state
-     * @param asteroid Asteroid that has been split
+     * @param parent Asteroid that has been split
      */
-    protected Entity fracture(World world, Entity asteroid) {
+    protected Entity fracture(World world, Entity parent) {
 
-        PositionPart positionPart = asteroid.getPart(PositionPart.class);
-        MovingPart movingPart = asteroid.getPart(MovingPart.class);
+        PositionPart parentPosition = parent.getPart(PositionPart.class);
+        MovingPart parentMovement = parent.getPart(MovingPart.class);
 
         Entity fragment = new Asteroid();
 
-        float radians = (float) (positionPart.getRadians() + Math.PI);
-
-        float startSpeed = (float) ((Math.random() + .5) * movingPart.getSpeed());
-
-        constructor.build(fragment, positionPart.getX(), positionPart.getY(), radians, startSpeed,1);
+        constructor.configure(fragment,
+                new PositionPart(parentPosition.getX(), parentPosition.getY(), (float) (Math.random() * 2 * Math.PI)),
+                new LifePart(1,1_000_000),
+                new MovingPart(0,0,400,0,(float) ((Math.random() + .5) * parentMovement.getSpeed()))
+                );
 
         System.out.println("Asteroid fractured");
         return fragment;

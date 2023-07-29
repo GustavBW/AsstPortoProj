@@ -10,10 +10,16 @@ import guwan21.common.data.entityparts.MovingPart;
 import guwan21.common.data.entityparts.PositionPart;
 import guwan21.common.data.entityparts.WeaponPart;
 import guwan21.common.services.IBulletCreator;
+import guwan21.common.services.IEntityConstructionService;
 import guwan21.common.services.IEntityProcessingService;
+import guwan21.common.util.EntityConstructionServiceRegistry;
 import guwan21.common.util.SPILocator;
 
 public class PlayerProcessingService implements IEntityProcessingService {
+
+    private final IEntityConstructionService constructor = EntityConstructionServiceRegistry.getFor(Player.class);
+
+
     @Override
     public void process(GameData data, World world) {
         for (Entity player : world.getEntities(Player.class)) {
@@ -37,39 +43,7 @@ public class PlayerProcessingService implements IEntityProcessingService {
                 SPILocator.locateBeans(IBulletCreator.class).forEach(bc -> bc.fire(player,world));
             }
 
-            updateShape(player);
+            constructor.updateShape(player);
         }
-    }
-
-    /**
-     * Update the shape of entity
-     * <br />
-     * Pre-condition: An entity that can be drawn, and a game tick has passed since last call for entity <br />
-     * Post-condition: Updated shape location for the entity
-     *
-     * @param entity Entity to update shape of
-     */
-    private void updateShape(Entity entity) {
-        float[] shapex = entity.getShapeX();
-        float[] shapey = entity.getShapeY();
-        PositionPart positionPart = entity.getPart(PositionPart.class);
-        float x = positionPart.getX();
-        float y = positionPart.getY();
-        float radians = positionPart.getRadians();
-
-        shapex[0] = (float) (x + Math.cos(radians) * 8);
-        shapey[0] = (float) (y + Math.sin(radians) * 8);
-
-        shapex[1] = (float) (x + Math.cos(radians - 4 * 3.1415f / 5) * 8);
-        shapey[1] = (float) (y + Math.sin(radians - 4 * 3.1145f / 5) * 8);
-
-        shapex[2] = (float) (x + Math.cos(radians + 3.1415f) * 5);
-        shapey[2] = (float) (y + Math.sin(radians + 3.1415f) * 5);
-
-        shapex[3] = (float) (x + Math.cos(radians + 4 * 3.1415f / 5) * 8);
-        shapey[3] = (float) (y + Math.sin(radians + 4 * 3.1415f / 5) * 8);
-
-        entity.setShapeX(shapex);
-        entity.setShapeY(shapey);
     }
 }

@@ -5,6 +5,7 @@ import guwan21.common.data.World;
 import guwan21.common.data.entities.Asteroid;
 import guwan21.common.data.entities.Bullet;
 import guwan21.common.data.entities.Entity;
+import guwan21.common.data.entityparts.EntityPart;
 import guwan21.common.services.IEntityConstructionService;
 import org.junit.jupiter.api.Test;
 
@@ -33,9 +34,11 @@ class EntityConstructionServiceRegistryTest {
         }
 
         @Override
-        public Entity build(Entity entity, float startPosX, float startPosY, float direction, float startSpeed, int hp) {
+        public Entity configure(Entity entity, EntityPart... parts) {
             return null;
         }
+
+
     }
     private static class AsteroidConstructorTestClass implements IEntityConstructionService{
 
@@ -55,9 +58,11 @@ class EntityConstructionServiceRegistryTest {
         }
 
         @Override
-        public Entity build(Entity entity, float startPosX, float startPosY, float direction, float startSpeed, int hp) {
+        public Entity configure(Entity entity, EntityPart... parts) {
             return null;
         }
+
+
     }
     private static class DontReturnThisConstructorTestClass implements IEntityConstructionService{
         @Override
@@ -76,9 +81,11 @@ class EntityConstructionServiceRegistryTest {
         }
 
         @Override
-        public Entity build(Entity entity, float startPosX, float startPosY, float direction, float startSpeed, int hp) {
+        public Entity configure(Entity entity, EntityPart... parts) {
             return null;
         }
+
+
     }
 
     @Test
@@ -92,7 +99,11 @@ class EntityConstructionServiceRegistryTest {
         constructionServices.put(Bullet.class, bulletConstructor);
         constructionServices.put(Asteroid.class, asteroidConstructor);
 
+        //Overwrite the map
         EntityConstructionServiceRegistry registry = new EntityConstructionServiceRegistry(constructionServices);
+        //If I request a construction service for the bullet class, it should return the bulletConstructor instance
+        assertEquals(bulletConstructor,EntityConstructionServiceRegistry.getFor(Bullet.class));
+        assertEquals(asteroidConstructor,EntityConstructionServiceRegistry.getFor(Asteroid.class));
 
     }
 }

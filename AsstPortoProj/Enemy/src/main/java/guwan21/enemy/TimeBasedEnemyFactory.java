@@ -22,11 +22,11 @@ public class TimeBasedEnemyFactory implements ITimeBasedEntityFactory {
     @Override
     public Entity configure(Entity instance, GameData data, World world) {
         currentTimeout = Sigmoid.inverted(
-                (float) data.getMsFromGameStart(), //x
-                5000,
-                500,
+                (float) data.getMsFromGameStart() / 1000, //x
+                5000, //new instance every 5 seconds
+                500, //new instance twice a second
                 .02f,
-                200
+                200 //At 200 seconds (>3 min) into the game, the rapid increase will ease out
         );
         return constructor.adaptTo(instance,data,world);
     }
