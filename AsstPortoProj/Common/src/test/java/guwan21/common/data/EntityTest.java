@@ -92,4 +92,18 @@ class EntityTest {
         assertEquals(list.size(),idSet.size()); //Expect 1000 unique ids
     }
 
+    @Test
+    void setParent(){
+        Entity child = new Entity();
+        Entity parent = new Entity();
+        child.setParent(parent);
+        //verify that the parent was set
+        assertEquals(parent, child.getParent());
+        //verify that self cannot be parent and is ignored
+        child.setParent(child);
+        assertNotEquals(child, child.getParent());
+        //and that their parent is indeed still their parent
+        assertEquals(parent, child.getParent());
+    }
+
 }

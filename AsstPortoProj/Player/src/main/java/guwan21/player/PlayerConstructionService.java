@@ -1,13 +1,16 @@
 package guwan21.player;
 
+import guwan21.common.data.Color;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
-import guwan21.common.data.entities.Entity;
-import guwan21.common.data.entities.Player;
+import guwan21.common.data.entities.*;
 import guwan21.common.data.entityparts.*;
 import guwan21.common.services.IEntityConstructionService;
 
 public class PlayerConstructionService implements IEntityConstructionService {
+
+    private Color fullHealthColor = new Color(0,1,1,1),
+            lowHealthColor = new Color(1,1,0,1);
 
     @Override
     public Entity create() {
@@ -19,13 +22,14 @@ public class PlayerConstructionService implements IEntityConstructionService {
                 10,
                 200,
                 300,
-                5,
+                15,
                 0
         ));
         player.add(new PositionPart(.5f, .5f, (float) Math.PI / 2));
         player.add(new LifePart(3, 10_000_00));
         player.add(new WeaponPart(0.2f));
-
+        player.add(new EnemyRecord(Asteroid.class, Enemy.class));
+        player.setColor(fullHealthColor);
         return player;
     }
 
@@ -63,6 +67,10 @@ public class PlayerConstructionService implements IEntityConstructionService {
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
+
+        if(entity.getPart(LifePart.class).getLife() == 1)
+            entity.setColor(lowHealthColor);
+
         return entity;
     }
 

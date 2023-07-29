@@ -28,6 +28,11 @@ public class LifePart implements EntityPart {
         return isHit;
     }
 
+    public boolean verifyHit(Entity offender, Entity victim){
+        EnemyRecord enemies = victim.getPart(EnemyRecord.class);
+        return enemies != null && enemies.contains(offender);
+    }
+
     public void setIsHit(boolean isHit) {
         this.isHit = isHit;
     }

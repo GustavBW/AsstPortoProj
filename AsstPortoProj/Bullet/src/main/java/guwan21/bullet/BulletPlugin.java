@@ -32,6 +32,7 @@ public class BulletPlugin implements IGamePluginService, IBulletCreator {
     @Override
     public void fire(Entity shotOrigin, World world) {
         Entity bullet = bulletConstructor.create();
+        bullet.setParent(shotOrigin);
 
         PositionPart soPosition = shotOrigin.getPart(PositionPart.class);
         final float radians = soPosition.getRadians();
@@ -53,6 +54,8 @@ public class BulletPlugin implements IGamePluginService, IBulletCreator {
                 new PositionPart(x, y, radians),
                 new LifePart(1,3)
         );
+
+        System.out.println("pew");
 
         world.addEntity(bullet);
     }

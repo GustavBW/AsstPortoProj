@@ -3,12 +3,8 @@ package guwan21.bullet;
 import guwan21.common.data.Color;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
-import guwan21.common.data.entities.Bullet;
-import guwan21.common.data.entities.Entity;
-import guwan21.common.data.entityparts.EntityPart;
-import guwan21.common.data.entityparts.LifePart;
-import guwan21.common.data.entityparts.MovingPart;
-import guwan21.common.data.entityparts.PositionPart;
+import guwan21.common.data.entities.*;
+import guwan21.common.data.entityparts.*;
 import guwan21.common.services.IEntityConstructionService;
 
 public class BulletConstructionService implements IEntityConstructionService {
@@ -23,6 +19,7 @@ public class BulletConstructionService implements IEntityConstructionService {
         bullet.add(new MovingPart(0,0,1000,5, 400));
         bullet.add(new PositionPart(0, 0, 0));
         bullet.add(new LifePart(1, 3));
+        bullet.add(new EnemyRecord(Asteroid.class, Enemy.class, Player.class));
 
         return bullet;
     }

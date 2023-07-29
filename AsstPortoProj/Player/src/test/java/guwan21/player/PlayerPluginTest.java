@@ -18,23 +18,18 @@ class PlayerPluginTest {
     @Test
     void start() {
         IGamePluginService plugin = new PlayerPlugin();
-        World mockWorld = mock(World.class);
-        GameData mockData = mock(GameData.class);
-        plugin.start(mockData, mockWorld);
-
-        verify(mockWorld, times(1)).addEntity(any(Player.class));
-        verify(mockWorld, never()).removeEntity(any(Player.class));
+        World world = mock(World.class);
+        plugin.start(mock(GameData.class), world);
+        verify(world, times(1)).addEntity(any(Player.class));
+        verify(world, never()).removeEntity(any(Player.class));
     }
 
     @Test
     void stop() {
         IGamePluginService plugin = new PlayerPlugin();
-        World mockWorld = mock(World.class);
-        GameData mockData = mock(GameData.class);
-
-        plugin.stop(mockData, mockWorld);
-
-        verify(mockWorld, times(1)).removeEntities(Player.class);
-        verify(mockWorld, never()).addEntity(any(Player.class));
+        World world = mock(World.class);
+        plugin.stop(mock(GameData.class), world);
+        verify(world, times(1)).removeEntities(Player.class);
+        verify(world, never()).addEntity(any(Player.class));
     }
 }

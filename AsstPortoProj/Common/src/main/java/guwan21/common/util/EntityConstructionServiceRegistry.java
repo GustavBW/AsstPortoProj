@@ -7,6 +7,7 @@ import guwan21.common.util.SPILocator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Service locator utility for IEntityConstructionService implementations
@@ -14,7 +15,7 @@ import java.util.Optional;
  */
 public class EntityConstructionServiceRegistry {
 
-    private static Map<Class<?>, IEntityConstructionService> constructionServices = new HashMap<>();
+    private static Map<Class<?>, IEntityConstructionService> constructionServices = new ConcurrentHashMap<>();
 
     public EntityConstructionServiceRegistry(){}
     public EntityConstructionServiceRegistry(Map<Class<?>, IEntityConstructionService> overwrite){
@@ -28,14 +29,14 @@ public class EntityConstructionServiceRegistry {
      * @return The construction service for said entity subtype.
      */
     public static <T extends Entity> IEntityConstructionService getFor(Class<T> entityClazz) {
-        return constructionServices.computeIfAbsent(entityClazz, value -> {
-            Optional<IEntityConstructionService> optionalService = SPILocator.locateBeans(IEntityConstructionService.class)
+        return constructionServices.computeIfAbsent(entityClazz, value ->
+            SPILocator.locateBeans(IEntityConstructionService.class)
                     .stream()
+                    //duck-typing on construction service product
                     .filter(service -> entityClazz.isInstance(service.create()))
-                    .findFirst();
-
-            return optionalService.orElse(null);
-        });
+                    .findFirst()
+                    .orElse(null)
+        );
     }
 
 }

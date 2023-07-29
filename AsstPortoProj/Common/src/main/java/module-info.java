@@ -11,6 +11,7 @@ module Common {
 
     uses IBulletCreator;
     uses IGamePluginService;
+    uses IEntityPreProcessingService;
     uses IEntityProcessingService;
     uses IEntityPostProcessingService;
     uses ITimeBasedEntityFactory;

@@ -23,9 +23,17 @@ public class CollisionDetector implements IEntityPostProcessingService {
 
                 if(e1.getID().equals(e2.getID())) continue;
 
+                LifePart e1LP = e1.getPart(LifePart.class);
+                LifePart e2LP = e2.getPart(LifePart.class);
+
+                boolean e1CanGetHitBye2 = e1LP.verifyHit(e2,e1);
+                boolean e2CanGetHitBye1 = e2LP.verifyHit(e1,e2);
+
+                if(!(e1CanGetHitBye2 || e2CanGetHitBye1)) continue;
+
                 if(isColliding(e1,e2)){
-                    e1.getPart(LifePart.class).setIsHit(true);
-                    e2.getPart(LifePart.class).setIsHit(true);
+                    e1LP.setIsHit(e1CanGetHitBye2);
+                    e2LP.setIsHit(e2CanGetHitBye1);
                 }
             }
         }

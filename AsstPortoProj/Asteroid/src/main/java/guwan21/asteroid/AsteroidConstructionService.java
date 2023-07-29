@@ -1,14 +1,10 @@
 package guwan21.asteroid;
 
 import guwan21.common.data.Color;
-import guwan21.common.data.entities.Asteroid;
-import guwan21.common.data.entities.Entity;
+import guwan21.common.data.entities.*;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
-import guwan21.common.data.entityparts.EntityPart;
-import guwan21.common.data.entityparts.LifePart;
-import guwan21.common.data.entityparts.MovingPart;
-import guwan21.common.data.entityparts.PositionPart;
+import guwan21.common.data.entityparts.*;
 import guwan21.common.services.IEntityConstructionService;
 
 public class AsteroidConstructionService implements IEntityConstructionService {
@@ -43,7 +39,12 @@ public class AsteroidConstructionService implements IEntityConstructionService {
         asteroid.setColor(defaultColor);
         asteroid.add(new LifePart(baseHitPoint, 1_000_000));
         asteroid.add(new MovingPart(0,0,400,0, (float) (Math.random() * 50f) + 25f));
-        asteroid.add(new PositionPart((float) Math.random(), (float) Math.random(), (float) (Math.random() * (2 * Math.PI))));
+        asteroid.add(new EnemyRecord(Enemy.class, Player.class, Bullet.class));
+
+        int topBottom = Math.random() > .5 ? 1 : 0;
+        int leftRight = topBottom == 1 ? 0 : 1;
+
+        asteroid.add(new PositionPart((float) Math.random() * topBottom, (float) Math.random() * leftRight, (float) (Math.random() * (2 * Math.PI))));
 
         this.setAsteroidRadius(asteroid);
 

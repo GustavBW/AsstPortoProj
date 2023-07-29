@@ -15,10 +15,12 @@ import guwan21.common.services.IEntityProcessingService;
 import guwan21.common.util.EntityConstructionServiceRegistry;
 import guwan21.common.util.SPILocator;
 
+import java.util.Collection;
+
 public class PlayerProcessingService implements IEntityProcessingService {
 
     private final IEntityConstructionService constructor = EntityConstructionServiceRegistry.getFor(Player.class);
-
+    private final Collection<IBulletCreator> bulletCreators = SPILocator.locateBeans(IBulletCreator.class);
 
     @Override
     public void process(GameData data, World world) {
@@ -40,7 +42,7 @@ public class PlayerProcessingService implements IEntityProcessingService {
 
             weaponPart.setFiring(data.getKeys().isDown(GameKeys.SPACE));
             if (weaponPart.isFiring()) {
-                SPILocator.locateBeans(IBulletCreator.class).forEach(bc -> bc.fire(player,world));
+                bulletCreators.forEach(bc -> bc.fire(player,world));
             }
 
             constructor.updateShape(player);

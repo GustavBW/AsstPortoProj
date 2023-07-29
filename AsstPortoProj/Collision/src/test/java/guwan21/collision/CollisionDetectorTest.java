@@ -3,6 +3,7 @@ package guwan21.collision;
 import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
+import guwan21.common.data.entityparts.EnemyRecord;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.PositionPart;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,9 +39,11 @@ class CollisionDetectorTest {
         Entity entity1 = mock(Entity.class);
         LifePart e1LifePart = mock(LifePart.class);
         PositionPart e1PosPart = mock(PositionPart.class);
+
         //Defining mock behaviour
         when(e1LifePart.getLife()).thenReturn(entity1Life);
         when(e1LifePart.getExpiration()).thenReturn(1_000_000f);
+        when(e1LifePart.verifyHit(any(Entity.class),any(Entity.class))).thenReturn(true);
 
         when(e1PosPart.getX()).thenReturn(entity1X);
         when(e1PosPart.getY()).thenReturn(entity1Y);
@@ -50,7 +53,7 @@ class CollisionDetectorTest {
         when(entity1.getPart(LifePart.class)).thenReturn(e1LifePart);
         when(entity1.getID()).thenReturn(e1Id);
 
-        //Establishing mock e1
+        //Establishing mock e2
         Entity entity2 = mock(Entity.class);
         PositionPart e2PosPart = mock(PositionPart.class);
         LifePart e2LifePart = mock(LifePart.class);
@@ -60,6 +63,7 @@ class CollisionDetectorTest {
 
         when(e2LifePart.getLife()).thenReturn(entity2Life);
         when(e2LifePart.getExpiration()).thenReturn(1_000_000f);
+        when(e2LifePart.verifyHit(any(Entity.class),any(Entity.class))).thenReturn(true);
 
         when(entity2.getRadius()).thenReturn(entity2R);
         when(entity2.getPart(PositionPart.class)).thenReturn(e2PosPart);

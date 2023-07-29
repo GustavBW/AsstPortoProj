@@ -40,7 +40,6 @@ public class AsteroidFragmentationPlugin implements IGamePluginService {
                 new MovingPart(0,0,400,0,(float) ((Math.random() + .5) * parentMovement.getSpeed()))
                 );
 
-        System.out.println("Asteroid fractured");
         return fragment;
     }
 }

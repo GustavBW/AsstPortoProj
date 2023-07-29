@@ -9,6 +9,7 @@ import guwan21.common.data.*;
 import guwan21.common.data.entities.Entity;
 import guwan21.common.factories.ITimeBasedEntityFactory;
 import guwan21.common.services.IEntityPostProcessingService;
+import guwan21.common.services.IEntityPreProcessingService;
 import guwan21.common.services.IEntityProcessingService;
 import guwan21.common.util.SPILocator;
 import guwan21.components.AutomatedFactoriesProcessingService;
@@ -51,7 +52,10 @@ public class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(
             new GameInputProcessor(data)
         );
-
+        System.out.println("[GAME] Locating implementations of IEntityPreProcessingService, found: ...");
+        for(IEntityPreProcessingService proc : SPILocator.locateBeans(IEntityPreProcessingService.class)){
+            System.out.println("   |- "+proc.getClass());
+        }
         System.out.println("[GAME] Locating implementations of IEntityProcessingService, found: ...");
         for(IEntityProcessingService proc : SPILocator.locateBeans(IEntityProcessingService.class)){
             System.out.println("   |- "+proc.getClass());

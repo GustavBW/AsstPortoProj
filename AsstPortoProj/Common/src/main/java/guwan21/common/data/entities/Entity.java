@@ -17,6 +17,7 @@ public class Entity implements Serializable {
     private float radius;
     private Color color;
     private final Map<Class<? extends EntityPart>, EntityPart> parts;
+    private Entity parent = null;
     
     public Entity() {
         parts = new ConcurrentHashMap<>();
@@ -74,5 +75,14 @@ public class Entity implements Serializable {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public void setParent(Entity parent){
+        if(parent != this){
+            this.parent = parent;
+        }
+    }
+    public Entity getParent(){
+        return parent;
     }
 }

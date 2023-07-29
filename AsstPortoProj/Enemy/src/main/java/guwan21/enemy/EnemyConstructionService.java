@@ -1,8 +1,7 @@
 package guwan21.enemy;
 
 import guwan21.common.data.Color;
-import guwan21.common.data.entities.Enemy;
-import guwan21.common.data.entities.Entity;
+import guwan21.common.data.entities.*;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.data.entityparts.*;
@@ -23,19 +22,20 @@ public class EnemyConstructionService implements IEntityConstructionService {
         float y = (float) Math.random();
         float radians = (float) (Math.random() * 2 * Math.PI);
 
-        Entity enemyShip = new Enemy();
+        Entity enemy = new Enemy();
 
-        enemyShip.setRadius(baseRadius);
+        enemy.setRadius(baseRadius);
 
-        enemyShip.setShapeX(new float[14]);
-        enemyShip.setShapeY(new float[14]);
-        enemyShip.setColor(new Color(1,.1f,.1f,1));
-        enemyShip.add(new MovingPart(baseDecellaration, acceleration, maxSpeed, rotationSpeed, 50));
-        enemyShip.add(new PositionPart(x, y, radians));
-        enemyShip.add(new LifePart(1, 10_000_000));
-        enemyShip.add(new WeaponPart(0.2f));
+        enemy.setShapeX(new float[14]);
+        enemy.setShapeY(new float[14]);
+        enemy.setColor(new Color(1,.1f,.1f,1));
+        enemy.add(new MovingPart(baseDecellaration, acceleration, maxSpeed, rotationSpeed, 50));
+        enemy.add(new PositionPart(x, y, radians));
+        enemy.add(new LifePart(1, 10_000_000));
+        enemy.add(new WeaponPart(0.2f));
+        enemy.add(new EnemyRecord(Player.class, Asteroid.class));
 
-        return enemyShip;
+        return enemy;
     }
 
     @Override
