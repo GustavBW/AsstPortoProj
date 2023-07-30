@@ -5,6 +5,7 @@ module Common {
     exports guwan21.common.util;
     exports guwan21.common.factories;
     exports guwan21.common.data.entities;
+    exports guwan21.common.events;
 
     uses guwan21.common.services.IBulletCreator;
     uses guwan21.common.services.IGamePluginService;

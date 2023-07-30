@@ -7,7 +7,6 @@ import guwan21.common.data.World;
 import guwan21.common.data.entities.Player;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.MovingPart;
-import guwan21.common.data.entityparts.PositionPart;
 import guwan21.common.data.entityparts.WeaponPart;
 import guwan21.common.services.IBulletCreator;
 import guwan21.common.services.IEntityConstructionService;
@@ -20,7 +19,7 @@ import java.util.Collection;
 public class PlayerProcessingService implements IEntityProcessingService {
 
     private final IEntityConstructionService constructor = EntityConstructionServiceRegistry.getFor(Player.class);
-    private final Collection<IBulletCreator> bulletCreators = SPILocator.locateBeans(IBulletCreator.class);
+    private final Collection<IBulletCreator> bulletCreators = SPILocator.getBeans(IBulletCreator.class);
 
     @Override
     public void process(GameData data, World world) {

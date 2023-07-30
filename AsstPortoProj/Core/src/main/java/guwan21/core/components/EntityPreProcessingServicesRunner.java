@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class EntityPreProcessingServicesRunner implements IEntityPreProcessingServicesRunner {
     @Override
     public void process(GameData data, World world) {
-        for(IEntityPreProcessingService proc : SPILocator.locateBeans(IEntityPreProcessingService.class)){
+        for(IEntityPreProcessingService proc : SPILocator.getBeans(IEntityPreProcessingService.class)){
             proc.process(data,world);
         }
     }

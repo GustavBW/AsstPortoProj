@@ -23,7 +23,7 @@ public class EntityConstructionServiceRegistry implements Initializable {
      */
     public static IEntityConstructionService getFor(Class<? extends Entity> entityClazz) {
         return constructionServices.computeIfAbsent(entityClazz, value ->
-            SPILocator.locateBeans(IEntityConstructionService.class)
+            SPILocator.getBeans(IEntityConstructionService.class)
                     .stream()
                     //duck-typing on construction service product
                     .filter(service -> entityClazz.isInstance(service.create()))

@@ -47,7 +47,7 @@ public class EnemyProcessingService implements IEntityProcessingService {
 
             weaponPart.setFiring(true);
             if (weaponPart.isFiring()) {
-                SPILocator.locateBeans(IBulletCreator.class).forEach(bc -> bc.fire(enemy,world));
+                SPILocator.getBeans(IBulletCreator.class).forEach(bc -> bc.fire(enemy,world));
             }
 
         }

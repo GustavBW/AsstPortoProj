@@ -21,16 +21,9 @@ public class Main {
 		cfg.setWindowedMode(width, height);
 		cfg.setResizable(false);
 
-		IBootLoader bootLoader = SpringBeansManager.getBean("guwan21.core", IBootLoader.class);
-		if(bootLoader == null) {
-			System.err.println("No Boot Loader found.");
-		}else{
-			bootLoader.run(args);
-		}
-
 		new Lwjgl3Application(
 				//Locate any present implementation of the ApplicationListener interface in this package.
-				SpringBeansManager.getBean("guwan21.core",ApplicationListener.class),
+				SpringBeansManager.getBean("guwan21.core.main",ApplicationListener.class),
 				cfg
 		);
 	}

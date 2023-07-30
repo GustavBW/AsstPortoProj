@@ -13,11 +13,11 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <spring.version>6.0.9</spring.version>
+        <spring.version>6.0.2</spring.version>
 
         <surefire.version>3.0.0</surefire.version>
         <junit.jupiter.version>5.9.2</junit.jupiter.version>
-        <junit.platform.version>1.9.2</junit.platform.version>
+        <junit.platform.version>1.9.1</junit.platform.version>
         <mockito.core.version>5.3.1</mockito.core.version>
     </properties>
 
@@ -86,7 +86,7 @@
                         in "java.lang.module.FindException: Module monitor.observer.zero not found";
                         strange... -->
                         <!--<argument>&#45;&#45;add-modules=monitor.observer.zero</argument>-->
-                        <argument>--module=Core/guwan21.main.Main</argument>
+                        <argument>--module=Core/guwan21.core.main.Main</argument>
                     </arguments>
                 </configuration>
             </plugin>

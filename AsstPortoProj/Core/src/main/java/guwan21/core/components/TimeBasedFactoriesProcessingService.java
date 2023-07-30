@@ -17,7 +17,7 @@ public class TimeBasedFactoriesProcessingService implements ITimeBasedFactoriesP
 
     @Override
     public void process(GameData data, World world) {
-        for(ITimeBasedEntityFactory factory : SPILocator.locateBeans(ITimeBasedEntityFactory.class)){
+        for(ITimeBasedEntityFactory factory : SPILocator.getBeans(ITimeBasedEntityFactory.class)){
             Long timestamp = factoryNextInvocationTimestampMap.get(factory);
             if(timestamp == null || timestamp <= System.currentTimeMillis()){
                 Entity entity = invokeFactory(factory,data,world);

@@ -12,7 +12,6 @@ import guwan21.common.services.IEntityPostProcessingService;
 import guwan21.common.services.IEntityPreProcessingService;
 import guwan21.common.services.IEntityProcessingService;
 import guwan21.common.util.SPILocator;
-import guwan21.components.*;
 import guwan21.core.components.IEntityPostProcessingServicesRunner;
 import guwan21.core.components.IEntityPreProcessingServicesRunner;
 import guwan21.core.components.IEntityProcessingServicesRunner;
@@ -29,7 +28,7 @@ import java.util.*;
 public class Game implements ApplicationListener {
 
     private final LinkedHashMap<Class<?>, SpringBeansManager.VoidFunction<?>> onUpdateRun = new LinkedHashMap<>();
-    private final AnnotationConfigApplicationContext cachedOnUpdateContext = SpringBeansManager.getContextFor("guwan21.core");
+    private final AnnotationConfigApplicationContext cachedOnUpdateContext = SpringBeansManager.getContextFor("guwan21.core.components");
 
     private static OrthographicCamera cam;
     private ShapeRenderer sr;
@@ -54,19 +53,19 @@ public class Game implements ApplicationListener {
             new GameInputProcessor(data)
         );
         System.out.println("[GAME] Locating implementations of IEntityPreProcessingService, found: ...");
-        for(IEntityPreProcessingService proc : SPILocator.locateBeans(IEntityPreProcessingService.class)){
+        for(IEntityPreProcessingService proc : SPILocator.getBeans(IEntityPreProcessingService.class)){
             System.out.println("   |- "+proc.getClass());
         }
         System.out.println("[GAME] Locating implementations of IEntityProcessingService, found: ...");
-        for(IEntityProcessingService proc : SPILocator.locateBeans(IEntityProcessingService.class)){
+        for(IEntityProcessingService proc : SPILocator.getBeans(IEntityProcessingService.class)){
             System.out.println("   |- "+proc.getClass());
         }
         System.out.println("[GAME] Locating implementations of IEntityPostProcessingService, found: ...");
-        for(IEntityPostProcessingService proc : SPILocator.locateBeans(IEntityPostProcessingService.class)){
+        for(IEntityPostProcessingService proc : SPILocator.getBeans(IEntityPostProcessingService.class)){
             System.out.println("   |- "+proc.getClass());
         }
         System.out.println("[GAME] Locating implementations of ITimeBasedEntityFactory, found ...");
-        for(ITimeBasedEntityFactory factory : SPILocator.locateBeans(ITimeBasedEntityFactory.class)){
+        for(ITimeBasedEntityFactory factory : SPILocator.getBeans(ITimeBasedEntityFactory.class)){
             System.out.println("   |- "+factory.getClass());
         }
         System.out.println();
