@@ -33,12 +33,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>guwan21</groupId>
-            <artifactId>Asteroid</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <version>${junit.jupiter.version}</version>

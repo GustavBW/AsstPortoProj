@@ -8,7 +8,8 @@ AsstPortoProj/Collision/target
 AsstPortoProj/Player/target
 AsstPortoProj/Core/target
 AsstPortoProj/Enemy/target
-
+AsstPortoProj/Splitterator/target
+AsstPortoProj/Bullet/target
 
 # User-specific stuff
 .idea/**/workspace.xml
