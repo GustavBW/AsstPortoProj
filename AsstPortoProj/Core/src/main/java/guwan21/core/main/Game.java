@@ -1,4 +1,4 @@
-package guwan21.main;
+package guwan21.core.main;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -13,9 +13,13 @@ import guwan21.common.services.IEntityPreProcessingService;
 import guwan21.common.services.IEntityProcessingService;
 import guwan21.common.util.SPILocator;
 import guwan21.components.*;
-import guwan21.managers.IPluginManagementService;
-import guwan21.managers.GameInputProcessor;
-import guwan21.managers.SpringBeansManager;
+import guwan21.core.components.IEntityPostProcessingServicesRunner;
+import guwan21.core.components.IEntityPreProcessingServicesRunner;
+import guwan21.core.components.IEntityProcessingServicesRunner;
+import guwan21.core.components.ITimeBasedFactoriesProcessingService;
+import guwan21.core.managers.IPluginManagementService;
+import guwan21.core.managers.GameInputProcessor;
+import guwan21.core.managers.SpringBeansManager;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +29,7 @@ import java.util.*;
 public class Game implements ApplicationListener {
 
     private final LinkedHashMap<Class<?>, SpringBeansManager.VoidFunction<?>> onUpdateRun = new LinkedHashMap<>();
-    private final AnnotationConfigApplicationContext cachedOnUpdateContext = SpringBeansManager.getContextFor("guwan21.components");
+    private final AnnotationConfigApplicationContext cachedOnUpdateContext = SpringBeansManager.getContextFor("guwan21.core");
 
     private static OrthographicCamera cam;
     private ShapeRenderer sr;

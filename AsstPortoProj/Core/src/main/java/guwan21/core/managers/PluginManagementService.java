@@ -1,4 +1,4 @@
-package guwan21.managers;
+package guwan21.core.managers;
 
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;

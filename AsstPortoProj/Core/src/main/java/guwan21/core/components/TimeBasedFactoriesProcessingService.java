@@ -1,4 +1,4 @@
-package guwan21.components;
+package guwan21.core.components;
 
 import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;

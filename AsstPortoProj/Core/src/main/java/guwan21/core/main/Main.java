@@ -1,14 +1,12 @@
-package guwan21.main;
+package guwan21.core.main;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import guwan21.managers.SpringBeansManager;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import java.awt.*;
+import guwan21.core.managers.IBootLoader;
+import guwan21.core.managers.SpringBeansManager;
 
 
 public class Main {
@@ -23,11 +21,16 @@ public class Main {
 		cfg.setWindowedMode(width, height);
 		cfg.setResizable(false);
 
-
+		IBootLoader bootLoader = SpringBeansManager.getBean("guwan21.core", IBootLoader.class);
+		if(bootLoader == null) {
+			System.err.println("No Boot Loader found.");
+		}else{
+			bootLoader.run(args);
+		}
 
 		new Lwjgl3Application(
 				//Locate any present implementation of the ApplicationListener interface in this package.
-				SpringBeansManager.getBean("guwan21.main",ApplicationListener.class),
+				SpringBeansManager.getBean("guwan21.core",ApplicationListener.class),
 				cfg
 		);
 	}
