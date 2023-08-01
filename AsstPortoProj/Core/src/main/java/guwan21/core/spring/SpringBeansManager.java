@@ -1,4 +1,4 @@
-package guwan21.core.managers;
+package guwan21.core.spring;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

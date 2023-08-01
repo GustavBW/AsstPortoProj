@@ -18,7 +18,7 @@ import guwan21.core.components.IEntityProcessingServicesRunner;
 import guwan21.core.components.ITimeBasedFactoriesProcessingService;
 import guwan21.core.managers.IPluginManagementService;
 import guwan21.core.managers.GameInputProcessor;
-import guwan21.core.managers.SpringBeansManager;
+import guwan21.core.spring.SpringBeansManager;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 

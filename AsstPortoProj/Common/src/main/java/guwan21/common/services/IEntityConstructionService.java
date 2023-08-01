@@ -20,7 +20,7 @@ public interface IEntityConstructionService {
      * Adapts the entity to the current state of the game.
      * @param entity to adapt
      * @param data current game state
-     * @param world curretn world state
+     * @param world current world state
      * pre-condition: An entity which may or may not be adapted to the current game state.
      * post-condition: An adapted entity
      * @return the entity

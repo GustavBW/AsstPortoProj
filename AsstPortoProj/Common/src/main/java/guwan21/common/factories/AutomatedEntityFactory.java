@@ -14,7 +14,7 @@ public interface AutomatedEntityFactory<T extends Entity> {
 
     /**
      * Pre-condition: A presumably non-functional / incomplete instance
-     * Post-condition: A quite operational instance of T
+     * Post-condition: A fully operational instance of T
      */
     T configure(T instance, GameData data, World world);
 }

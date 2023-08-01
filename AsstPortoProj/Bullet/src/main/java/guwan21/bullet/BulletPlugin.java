@@ -1,6 +1,8 @@
 package guwan21.bullet;
 
 import java.lang.Math;
+import java.util.Collection;
+
 import guwan21.common.data.Color;
 import guwan21.common.data.entities.Bullet;
 import guwan21.common.data.entities.Entity;
@@ -9,6 +11,7 @@ import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.MovingPart;
 import guwan21.common.data.entityparts.PositionPart;
+import guwan21.common.events.Event;
 import guwan21.common.services.IBulletCreator;
 import guwan21.common.services.IEntityConstructionService;
 import guwan21.common.services.IGamePluginService;
@@ -27,6 +30,21 @@ public class BulletPlugin implements IGamePluginService, IBulletCreator {
     @Override
     public void stop(GameData data, World world) {
         world.removeEntities(Bullet.class);
+    }
+
+
+    public void checkFiringEvents(GameData data, World world) {
+        Collection<Event<?>> events = data.getBroker().getSpecific(
+                Entity.class,
+                IGamePluginService.class,
+                Event.Target.SERVICE,
+                Event.Type.INSTANT,
+                Event.Category.GAMEPLAY
+        );
+
+        for(Event<?> event : events){
+            fire((Entity) event.getSource(), world);
+        }
     }
 
     @Override

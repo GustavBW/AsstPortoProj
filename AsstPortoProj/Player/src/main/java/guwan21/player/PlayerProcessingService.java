@@ -8,9 +8,11 @@ import guwan21.common.data.entities.Player;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.MovingPart;
 import guwan21.common.data.entityparts.WeaponPart;
+import guwan21.common.events.Event;
 import guwan21.common.services.IBulletCreator;
 import guwan21.common.services.IEntityConstructionService;
 import guwan21.common.services.IEntityProcessingService;
+import guwan21.common.services.IGamePluginService;
 import guwan21.common.util.EntityConstructionServiceRegistry;
 import guwan21.common.util.SPILocator;
 
@@ -19,7 +21,6 @@ import java.util.Collection;
 public class PlayerProcessingService implements IEntityProcessingService {
 
     private final IEntityConstructionService constructor = EntityConstructionServiceRegistry.getFor(Player.class);
-    private final Collection<IBulletCreator> bulletCreators = SPILocator.getBeans(IBulletCreator.class);
 
     @Override
     public void process(GameData data, World world) {
@@ -40,8 +41,12 @@ public class PlayerProcessingService implements IEntityProcessingService {
             player.getParts().forEach(p -> p.process(data, player));
 
             weaponPart.setFiring(data.getKeys().isDown(GameKeys.SPACE));
+            //T source, Type type, Category category, Target target
             if (weaponPart.isFiring()) {
-                bulletCreators.forEach(bc -> bc.fire(player,world));
+                data.getBroker().addEvent(
+                        new Event<>(player, Event.Type.INSTANT, Event.Category.GAMEPLAY, Event.Target.SERVICE)
+                                .setTargetType(IGamePluginService.class)
+                );
             }
 
             constructor.updateShape(player);

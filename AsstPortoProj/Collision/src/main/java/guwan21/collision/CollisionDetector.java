@@ -29,6 +29,8 @@ public class CollisionDetector implements IEntityPostProcessingService {
                 boolean e1CanGetHitBye2 = e1LP.verifyHit(e2,e1);
                 boolean e2CanGetHitBye1 = e2LP.verifyHit(e1,e2);
 
+                //Since the implementation of the EnemyRecord entity part, although 2 entities are on top
+                //of each other, it may not mean that they hit.
                 if(!(e1CanGetHitBye2 || e2CanGetHitBye1)) continue;
 
                 if(isColliding(e1,e2)){

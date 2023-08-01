@@ -1,7 +1,5 @@
 package guwan21.common.util;
 
-import guwan21.common.bootloader.Initializable;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -14,7 +12,7 @@ import java.util.stream.Stream;
  * Revised ServiceLoader utility.
  * @author GustavBW
  */
-public class SPILocator implements Initializable {
+public class SPILocator{
 
     private static final Map<Class<?>, List<?>> serviceInstancesMap = new ConcurrentHashMap<>();
     private static final Map<Class<?>, List<Provider<?>>> servicesProvidersMap = new ConcurrentHashMap<>();
@@ -62,10 +60,5 @@ public class SPILocator implements Initializable {
 
     private static ServiceLoader<?> getLoader(Class<?> clazz){
         return servicesLoaderMap.computeIfAbsent(clazz, k -> ServiceLoader.load(clazz));
-    }
-
-    @Override
-    public void init() {
-
     }
 }

@@ -1,7 +1,6 @@
 package guwan21.common.util;
 
 import guwan21.common.data.entities.Entity;
-import guwan21.common.bootloader.Initializable;
 import guwan21.common.services.IEntityConstructionService;
 
 import java.util.Map;
@@ -11,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Service locator utility for IEntityConstructionService implementations
  * @author GustavBW
  */
-public class EntityConstructionServiceRegistry implements Initializable {
+public class EntityConstructionServiceRegistry {
 
     private static Map<Class<?>, IEntityConstructionService> constructionServices = new ConcurrentHashMap<>();
 
@@ -25,7 +24,6 @@ public class EntityConstructionServiceRegistry implements Initializable {
         return constructionServices.computeIfAbsent(entityClazz, value ->
             SPILocator.getBeans(IEntityConstructionService.class)
                     .stream()
-                    //duck-typing on construction service product
                     .filter(service -> entityClazz.isInstance(service.create()))
                     .findFirst()
                     .orElse(null)
@@ -38,8 +36,4 @@ public class EntityConstructionServiceRegistry implements Initializable {
         constructionServices = overwrite;
     }
 
-    @Override
-    public void init() {
-
-    }
 }

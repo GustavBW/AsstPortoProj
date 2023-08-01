@@ -5,10 +5,17 @@ import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
-import guwan21.common.data.entityparts.PositionPart;
+import guwan21.common.events.CompositeHashKey;
+import guwan21.common.events.Event;
 import guwan21.common.services.IEntityProcessingService;
+import guwan21.common.services.IGamePluginService;
+
+import java.util.Collection;
 
 public class BulletProcessingService implements IEntityProcessingService {
+
+    private BulletPlugin plugin = new BulletPlugin();
+
     @Override
     public void process(GameData data, World world) {
         for (Entity bullet : world.getEntities(Bullet.class)) {
@@ -21,7 +28,10 @@ public class BulletProcessingService implements IEntityProcessingService {
 
             updateShape(bullet);
         }
+
+        plugin.checkFiringEvents(data,world);
     }
+
 
     /**
      * Update the shape of entity

@@ -1,12 +1,9 @@
 package guwan21.core.main;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import guwan21.core.managers.IBootLoader;
-import guwan21.core.managers.SpringBeansManager;
+import guwan21.core.spring.SpringBeansManager;
 
 
 public class Main {

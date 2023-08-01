@@ -14,9 +14,5 @@ module Common {
     uses guwan21.common.services.IEntityPostProcessingService;
     uses guwan21.common.factories.ITimeBasedEntityFactory;
     uses guwan21.common.services.IEntityConstructionService;
-    uses guwan21.common.bootloader.Initializable;
 
-    provides guwan21.common.bootloader.Initializable with
-            guwan21.common.util.EntityConstructionServiceRegistry,
-            guwan21.common.util.SPILocator;
 }
