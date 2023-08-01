@@ -13,6 +13,7 @@
         <module name="Asteroid" />
         <module name="Collision" />
         <module name="Enemy" />
+        <module name="Event" />
         <module name="Common" />
         <module name="Core" />
         <module name="DefaultEnemy" />

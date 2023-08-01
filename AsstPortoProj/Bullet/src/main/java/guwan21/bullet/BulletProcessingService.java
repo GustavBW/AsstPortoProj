@@ -5,12 +5,7 @@ import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
-import guwan21.common.events.CompositeHashKey;
-import guwan21.common.events.Event;
 import guwan21.common.services.IEntityProcessingService;
-import guwan21.common.services.IGamePluginService;
-
-import java.util.Collection;
 
 public class BulletProcessingService implements IEntityProcessingService {
 

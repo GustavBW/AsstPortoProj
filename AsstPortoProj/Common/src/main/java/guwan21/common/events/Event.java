@@ -1,20 +1,23 @@
 package guwan21.common.events;
 
-import guwan21.common.data.entities.Entity;
-import guwan21.common.services.IGamePluginService;
-
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Event<T> implements Serializable{
 
+    /**
+     * What category an Event is in.
+     * Default: System.
+     */
     public enum Category {
         SYSTEM,
         UI,
-        GAMEPLAY,
-        __INVALID; //For treemap management purposes
+        GAMEPLAY;
     }
+
+    /**
+     * What type of Event it is.
+     * Default: Instant.
+     */
     public enum Type {
         /**
          * Removed on consumption
@@ -23,21 +26,24 @@ public class Event<T> implements Serializable{
         /**
          * Has to be removed manually
          */
-        LINGERING,
-        __INVALID; //For treemap management purposes
+        LINGERING;
 
     }
+
+    /**
+     * What is the purpose of the target of the Event.
+     * Default: Service.
+     */
     public enum Target {
         ENTITY,
         SERVICE,
-        PLUGIN,
-        __INVALID; //For treemap management purposes
+        PLUGIN;
     }
 
     private T objectSource = null;
-    private Type type = Type.__INVALID;
-    private Category category = Category.__INVALID;
-    private Target target = Target.__INVALID;
+    private Type type = Type.INSTANT;
+    private Category category = Category.SYSTEM;
+    private Target target = Target.SERVICE;
     private Class<?> targetType = null;
     private Class<?> sourceType = null;
 
@@ -50,6 +56,7 @@ public class Event<T> implements Serializable{
         this.category = category;
         this.type = type;
         this.objectSource = source;
+        this.sourceType = source.getClass();
     }
 
     public Event<T> setType(Type type){

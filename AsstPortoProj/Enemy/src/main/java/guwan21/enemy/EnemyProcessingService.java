@@ -9,9 +9,9 @@ import guwan21.common.data.World;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.MovingPart;
 import guwan21.common.data.entityparts.WeaponPart;
-import guwan21.common.services.IBulletCreator;
+import guwan21.common.events.Event;
 import guwan21.common.services.IEntityProcessingService;
-import guwan21.common.util.SPILocator;
+import guwan21.common.services.IGamePluginService;
 
 public class EnemyProcessingService implements IEntityProcessingService {
 
@@ -47,7 +47,14 @@ public class EnemyProcessingService implements IEntityProcessingService {
 
             weaponPart.setFiring(true);
             if (weaponPart.isFiring()) {
-                SPILocator.getBeans(IBulletCreator.class).forEach(bc -> bc.fire(enemy,world));
+                data.getBroker().addEvent(
+                        new Event<>(
+                        this,
+                        Event.Type.INSTANT,
+                        Event.Category.GAMEPLAY,
+                        Event.Target.SERVICE
+                    ).setTargetType(IGamePluginService.class)
+                );
             }
 
         }

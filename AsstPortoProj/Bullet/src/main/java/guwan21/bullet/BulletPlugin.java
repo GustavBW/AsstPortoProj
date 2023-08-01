@@ -3,28 +3,26 @@ package guwan21.bullet;
 import java.lang.Math;
 import java.util.Collection;
 
-import guwan21.common.data.Color;
 import guwan21.common.data.entities.Bullet;
 import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
+import guwan21.common.data.entities.Player;
 import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.MovingPart;
 import guwan21.common.data.entityparts.PositionPart;
 import guwan21.common.events.Event;
-import guwan21.common.services.IBulletCreator;
 import guwan21.common.services.IEntityConstructionService;
 import guwan21.common.services.IGamePluginService;
 import guwan21.common.util.EntityConstructionServiceRegistry;
-import guwan21.common.util.SPILocator;
 
-public class BulletPlugin implements IGamePluginService, IBulletCreator {
+public class BulletPlugin implements IGamePluginService{
 
     IEntityConstructionService bulletConstructor = EntityConstructionServiceRegistry.getFor(Bullet.class);
 
     @Override
     public void start(GameData data, World world) {
-
+        //TODO: Subscribe to broker.
     }
 
     @Override
@@ -34,8 +32,8 @@ public class BulletPlugin implements IGamePluginService, IBulletCreator {
 
 
     public void checkFiringEvents(GameData data, World world) {
-        Collection<Event<?>> events = data.getBroker().getSpecific(
-                Entity.class,
+        Collection<Event<?>> events = data.getBroker().querySpecific(
+                Player.class,
                 IGamePluginService.class,
                 Event.Target.SERVICE,
                 Event.Type.INSTANT,
@@ -45,12 +43,19 @@ public class BulletPlugin implements IGamePluginService, IBulletCreator {
         for(Event<?> event : events){
             fire((Entity) event.getSource(), world);
         }
+
+        events.forEach(event -> { //Uneccessary on automated consumptions when subscriptions are introduced
+            if(event.getType() == Event.Type.INSTANT){
+                data.getBroker().removeEvent(event);
+            }
+        });
     }
 
-    @Override
     public void fire(Entity shotOrigin, World world) {
         Entity bullet = bulletConstructor.create();
         bullet.setParent(shotOrigin);
+
+        bullet.setColor(shotOrigin.getColor());
 
         PositionPart soPosition = shotOrigin.getPart(PositionPart.class);
         final float radians = soPosition.getRadians();
@@ -73,7 +78,7 @@ public class BulletPlugin implements IGamePluginService, IBulletCreator {
                 new LifePart(1,3)
         );
 
-        System.out.println("pew");
+        System.out.println("Bullet Plugin \"pew\" by " + shotOrigin.getClass());
 
         world.addEntity(bullet);
     }

@@ -1,7 +1,8 @@
 package guwan21.common.data;
 
 import guwan21.common.events.Event;
-import guwan21.common.events.EventBroker;
+import guwan21.common.events.IEventBroker;
+import guwan21.common.util.SPILocator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,8 @@ public class GameData {
     private double msFromGameStart;
     private int displayHeight;
     private final GameKeys keys = new GameKeys();
-    private final EventBroker broker = new EventBroker();
+
+    private final IEventBroker broker = SPILocator.getBean(IEventBroker.class);
 
     public double getMsFromGameStart() {
         return msFromGameStart;
@@ -56,7 +58,7 @@ public class GameData {
         return displayHeight;
     }
 
-    public EventBroker getBroker(){
+    public IEventBroker getBroker(){
         return broker;
     }
 }

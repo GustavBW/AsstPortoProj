@@ -10,6 +10,7 @@ AsstPortoProj/Core/target
 AsstPortoProj/Enemy/target
 AsstPortoProj/Splitterator/target
 AsstPortoProj/Bullet/target
+AsstPortoProj/Event/target
 
 # User-specific stuff
 .idea/**/workspace.xml

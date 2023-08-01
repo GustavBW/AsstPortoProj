@@ -63,8 +63,8 @@ class LifePartTest {
     @org.junit.jupiter.api.Test
     void setExpiration() {
         LifePart part = new LifePart(1,1);
-        GameData data = new GameData();
-        data.setDelta(1);
+        GameData data = mock(GameData.class);
+        when(data.getDelta()).thenReturn(1f);
 
         part.setExpiration(1);
         assertEquals(1, part.getExpiration());

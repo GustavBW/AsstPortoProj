@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import guwan21.common.data.*;
+import guwan21.common.data.entities.Bullet;
 import guwan21.common.data.entities.Entity;
 import guwan21.common.factories.ITimeBasedEntityFactory;
 import guwan21.common.services.IEntityPostProcessingService;
@@ -133,7 +134,7 @@ public class Game implements ApplicationListener {
             Color color = entity.getColor();
             sr.setColor(color.getR(), color.getG(), color.getB(), color.getA());
 
-            sr.begin(ShapeRenderer.ShapeType.Line);
+            sr.begin(ShapeRenderer.ShapeType.Filled);
 
             float[] shapex = entity.getShapeX();
             float[] shapey = entity.getShapeY();
@@ -143,6 +144,11 @@ public class Game implements ApplicationListener {
                     j = i++) {
 
                 sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+            }
+            if(entity instanceof Bullet){
+                System.out.println("Just rendered a bullet: " + entity);
+                System.out.println(shapex.length);
+                System.out.println(shapey.length);
             }
 
             sr.end();

@@ -12,9 +12,9 @@ public class BulletConstructionService implements IEntityConstructionService {
     public Entity create() {
         Entity bullet = new Bullet();
 
-        bullet.setRadius(1);
-        bullet.setShapeX(new float[4]);
-        bullet.setShapeY(new float[4]);
+        bullet.setRadius(2);
+        bullet.setShapeX(new float[8]);
+        bullet.setShapeY(new float[8]);
         bullet.setColor(new Color(1,1,1,1));
         bullet.add(new MovingPart(0,0,1000,5, 400));
         bullet.add(new PositionPart(0, 0, 0));
@@ -33,22 +33,18 @@ public class BulletConstructionService implements IEntityConstructionService {
     public Entity updateShape(Entity entity) {
         float[] shapeX = entity.getShapeX();
         float[] shapeY = entity.getShapeY();
+
         PositionPart positionPart = entity.getPart(PositionPart.class);
         float x = positionPart.getX();
         float y = positionPart.getY();
-        float radians = positionPart.getRadians();
+        float size = entity.getRadius();
 
-        shapeX[0] = (float) (x + Math.cos(radians) * 1);
-        shapeY[0] = (float) (y + Math.sin(radians) * 1);
+        float angleIncrementRad = (float) ((Math.PI * 2) / shapeX.length);
 
-        shapeX[1] = (float) (x + Math.cos(radians) * 0);
-        shapeY[1] = (float) (y + Math.sin(radians) * 0);
-
-        shapeX[2] = (float) (x + Math.cos(radians) * 2);
-        shapeY[2] = (float) (y + Math.sin(radians) * 2);
-
-        shapeX[3] = (float) (x + Math.cos(radians) * -2);
-        shapeY[3] = (float) (y + Math.sin(radians) * -2);
+        for(int i = 0; i < shapeX.length; i++){
+            shapeX[i] = angleIncrementRad * i * size + x;
+            shapeY[i] = angleIncrementRad * i * size + y;
+        }
 
         entity.setShapeX(shapeX);
         entity.setShapeY(shapeY);
