@@ -15,9 +15,9 @@ public class EntityConstructionServiceRegistry {
     private static Map<Class<?>, IEntityConstructionService> constructionServices = new ConcurrentHashMap<>();
 
     /**
-     * Searches for a IEntityConstructionService producing the right entity subtype, instances it, caches the instance and returns it.
-     * If no service is available, it will return null.
-     * @param entityClazz The entity subtype the service has to produce.
+     * Searches for a IEntityConstructionService producing the right entity subtype, instances it, caches the instance and returns it.<br>
+     * If no service is available, it will return null.<br>
+     * @param entityClazz The entity subtype the service has to produce.<br>
      * @return The construction service for said entity subtype.
      */
     public static IEntityConstructionService getFor(Class<? extends Entity> entityClazz) {

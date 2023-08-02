@@ -7,14 +7,14 @@ import guwan21.common.data.World;
 public interface AutomatedEntityFactory<T extends Entity> {
 
     /**
-     * Pre-condition: A new instance of type T is needed.
-     * Post-condition: A new instance of type T is provided.
+     * Pre-condition: A new instance of type T is needed.<br>
+     * Post-condition: A new instance of type T is provided.<br>
      */
     T produce();
 
     /**
-     * Pre-condition: A presumably non-functional / incomplete instance
-     * Post-condition: A fully operational instance of T
+     * Pre-condition: A presumably non-functional / incomplete instance<br>
+     * Post-condition: A fully operational instance of T<br>
      */
     T configure(T instance, GameData data, World world);
 }

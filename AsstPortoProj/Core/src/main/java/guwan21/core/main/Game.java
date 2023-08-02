@@ -57,19 +57,19 @@ public class Game implements ApplicationListener {
         );
         System.out.println("[GAME] Locating implementations of IEntityPreProcessingService, found: ...");
         for(IEntityPreProcessingService proc : SPILocator.getBeans(IEntityPreProcessingService.class)){
-            System.out.println("   |- "+proc.getClass());
+            System.out.println("   |- "+proc.getClass() + " from: " + proc.getClass().getPackageName());
         }
         System.out.println("[GAME] Locating implementations of IEntityProcessingService, found: ...");
         for(IEntityProcessingService proc : SPILocator.getBeans(IEntityProcessingService.class)){
-            System.out.println("   |- "+proc.getClass());
+            System.out.println("   |- "+proc.getClass() + " from: " + proc.getClass().getPackageName());
         }
         System.out.println("[GAME] Locating implementations of IEntityPostProcessingService, found: ...");
         for(IEntityPostProcessingService proc : SPILocator.getBeans(IEntityPostProcessingService.class)){
-            System.out.println("   |- "+proc.getClass());
+            System.out.println("   |- "+proc.getClass() + " from: " + proc.getClass().getPackageName());
         }
         System.out.println("[GAME] Locating implementations of ITimeBasedEntityFactory, found ...");
         for(ITimeBasedEntityFactory factory : SPILocator.getBeans(ITimeBasedEntityFactory.class)){
-            System.out.println("   |- "+factory.getClass());
+            System.out.println("   |- "+factory.getClass() + " from: " + factory.getClass().getPackageName());
         }
         System.out.println();
 

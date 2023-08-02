@@ -24,9 +24,9 @@ public class SPILocator{
     }
 
     /**
-     * Loads any service providers of said type, caches and returns the instances provided.
-     * May throw a ClassCastException on service configuration error.
-     * @param clazz Type implementations to look for
+     * Loads any service providers of said type, caches and returns the instances provided.<br>
+     * May throw a ClassCastException on service configuration error.<br>
+     * @param clazz Type implementations to look for<br>
      * @return instances of said type
      */
     @SuppressWarnings("unchecked")
@@ -39,10 +39,10 @@ public class SPILocator{
     }
 
     /**
-     * Loads any service providers of said type, caches and returns the providers.
-     * Duly note that invoking the providers returns a new instance.
-     * May throw a ClassCastException on service configuration error.
-     * @param clazz Type of provider to look for
+     * Loads any service providers of said type, caches and returns the providers.<br>
+     * Duly note that invoking the providers returns a new instance.<br>
+     * May throw a ClassCastException on service configuration error.<br>
+     * @param clazz Type of provider to look for<br>
      * @return providers of said type
      */
     @SuppressWarnings("unchecked")
@@ -54,8 +54,8 @@ public class SPILocator{
     }
 
     /**
-     * Retrieves a ServiceLoader of said type.
-     * @param clazz Type of service to load
+     * Retrieves a ServiceLoader of said type.<br>
+     * @param clazz Type of service to load<br>
      * @return a ServiceLoader for that type
      */
     @SuppressWarnings("unchecked")

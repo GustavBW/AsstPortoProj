@@ -5,10 +5,10 @@ import guwan21.common.data.World;
 
 public interface IServicesRunner {
     /**
-     * Pre-condition: A services runner of some type of service is to be invoked
-     * Post-condition: The Services runner has run
-     *
-     * @param data Current game state
+     * Pre-condition: All services of some type needs to be invoked<br>
+     * Post-condition: The Services runner has run and invoked all provided services<br>
+     *<br>
+     * @param data Current game state<br>
      * @param world Current world state - inhabiting entities etc.
      */
     void process(GameData data, World world);
