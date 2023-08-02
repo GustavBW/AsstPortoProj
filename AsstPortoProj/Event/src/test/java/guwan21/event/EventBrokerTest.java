@@ -217,26 +217,26 @@ class EventBrokerTest {
         //There should be no additional invocations
         assertEquals(1, invocationCounter.get());
 
-
+        //renewing the counters:
+        AtomicInteger invocationCounter2 = new AtomicInteger(); //Could be done with Mockito
+        AtomicReference<Event<?>> eventInvokedWith2 = new AtomicReference<>();
         //If we throw the old subscriber and a new subscriber into the mix
-        EventQueryParameters params3 = new EventQueryParameters(null, Object.class, Event.Target.ENTITY, Event.Type.INSTANT, null);
+        EventQueryParameters params3 = new EventQueryParameters(Event.ANY_CLASS, Object.class, Event.Target.ENTITY, Event.Type.INSTANT, Event.Category.ANY);
         Function<Event<?>,Boolean> subscriber3 = event -> {
-            invocationCounter.getAndIncrement();
-            eventInvokedWith.set(event);
+            invocationCounter2.getAndIncrement();
+            eventInvokedWith2.set(event);
             return true;
         };
         broker.subscribe(subscriber3,params3);
         broker.subscribe(subscriber1,params1);
         //Alongside an event that matches none of them, but should match the new one because it is less specific
         Event<?> secondEventPublished = new Event<>(new Entity(), params3.type(), Event.Category.SYSTEM, params3.target()).setTargetType(Object.class);
-        //reset the counters:
-        invocationCounter.set(0);
-        eventInvokedWith.set(null);
+
 
         broker.publish(secondEventPublished);
-        //We should expect only this new subscriber to have incremented the values
-        assertEquals(1, invocationCounter.get());
-        assertEquals(eventPublished, eventInvokedWith.get());
+        //We should expect only this new subscriber to have incremented or set the values
+        assertEquals(1, invocationCounter2.get());
+        assertEquals(secondEventPublished, eventInvokedWith2.get());
     }
 
     @Test

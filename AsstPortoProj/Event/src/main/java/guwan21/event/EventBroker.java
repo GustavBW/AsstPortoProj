@@ -60,6 +60,12 @@ public class EventBroker implements IEventBroker {
                     categorySubscriberMap.put(category, new HashSet<>());
                 }
         );
+        //Adding these two
+        targetClassEventMap.put(Event.ANY_CLASS, new HashSet<>());
+        emitterClassEventMap.put(Event.ANY_CLASS, new HashSet<>());
+
+        emitterClassSubscriberMap.put(Event.ANY_CLASS, new HashSet<>());
+        targetClassSubscriberMap.put(Event.ANY_CLASS, new HashSet<>());
     }
 
     @Override
@@ -89,11 +95,17 @@ public class EventBroker implements IEventBroker {
     }
 
     private Collection<Function<Event<?>,Boolean>> querySubscribers(EventQueryParameters params){
-        Set<Function<Event<?>,Boolean>> byEmittorClass= params.emittorClass() == Event.ANY_CLASS  ? allCurrentSubscribers : emitterClassSubscriberMap.computeIfAbsent(params.emittorClass(), k -> new HashSet<>());
-        Set<Function<Event<?>,Boolean>> byTargetClass = params.targetClass() == Event.ANY_CLASS   ? allCurrentSubscribers : targetClassSubscriberMap.computeIfAbsent(params.targetClass(), k -> new HashSet<>());
-        Set<Function<Event<?>,Boolean>> byTarget      = params.target() == Event.Target.ANY       ? allCurrentSubscribers : targetSubscriberMap.get(params.target());
-        Set<Function<Event<?>,Boolean>> byType        = params.type() == Event.Type.ANY           ? allCurrentSubscribers : typeSubscriberMap.get(params.type());
-        Set<Function<Event<?>,Boolean>> byCategory    = params.category() == Event.Category.ANY   ? allCurrentSubscribers : categorySubscriberMap.get(params.category());
+        Set<Function<Event<?>,Boolean>> byEmittorClass= emitterClassSubscriberMap.computeIfAbsent(params.emittorClass(), k -> new HashSet<>()); //possibly unpopulated
+        byEmittorClass.addAll(emitterClassSubscriberMap.get(Event.ANY_CLASS)); //pre-populated in constructor
+        Set<Function<Event<?>,Boolean>> byTargetClass = targetClassSubscriberMap.computeIfAbsent(params.targetClass(), k -> new HashSet<>());
+        byTargetClass.addAll(targetClassSubscriberMap.get(Event.ANY_CLASS));
+
+        Set<Function<Event<?>,Boolean>> byTarget      = targetSubscriberMap.get(params.target());
+        byTarget.addAll(targetSubscriberMap.get(Event.Target.ANY));
+        Set<Function<Event<?>,Boolean>> byType        = typeSubscriberMap.get(params.type());
+        byType.addAll(typeSubscriberMap.get(Event.Type.ANY));
+        Set<Function<Event<?>,Boolean>> byCategory    = categorySubscriberMap.get(params.category());
+        byCategory.addAll(categorySubscriberMap.get(Event.Category.ANY));
 
         return intersection(byEmittorClass, byTargetClass, byTarget, byType, byCategory);
     }
@@ -139,10 +151,9 @@ public class EventBroker implements IEventBroker {
      */
     @Override
     public Collection<Event<?>> queryAny(EventQueryParameters params) {
-        //gathering all values of each map is ineffective, as all values of any map is the same due to how its put in
-
         Set<Event<?>> byEmittorClass= params.emittorClass() == Event.ANY_CLASS  ? allCurrentEvents : emitterClassEventMap.computeIfAbsent(params.emittorClass(), k -> new HashSet<>());
         Set<Event<?>> byTargetClass = params.targetClass() == Event.ANY_CLASS   ? allCurrentEvents : targetClassEventMap.computeIfAbsent(params.targetClass(), k -> new HashSet<>());
+
         Set<Event<?>> byTarget      = params.target() == Event.Target.ANY       ? allCurrentEvents : targetEventMap.get(params.target());
         Set<Event<?>> byType        = params.type() == Event.Type.ANY           ? allCurrentEvents : typeEventMap.get(params.type());
         Set<Event<?>> byCategory    = params.category() == Event.Category.ANY   ? allCurrentEvents : categoryEventMap.get(params.category());
