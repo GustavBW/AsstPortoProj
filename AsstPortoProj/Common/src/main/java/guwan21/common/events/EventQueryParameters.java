@@ -1,12 +1,6 @@
 package guwan21.common.events;
 
-/**
- * @param emittorClass The class of the object that presumably emitted the event
- * @param targetClass What class the event targets
- * @param target What is the target? A Service, Plugin, Entity...
- * @param type of event. Consumed or not.
- * @param category What category the event target belongs to: System, Gameplay, UI...
- */
+//Restructured from record as to provide null-safety required for the current implementation of IEventBroker
 public class EventQueryParameters {
 
     private Class<?> emittorClass;
@@ -14,12 +8,21 @@ public class EventQueryParameters {
     private Event.Target target;
     private Event.Type type;
     private Event.Category category;
+    private String name;
 
+    /**
+     * @param emittorClass The class of the object that presumably emitted the event
+     * @param targetClass What class the event targets
+     * @param target What is the target? A Service, Plugin, Entity...
+     * @param type of event. Consumed or not.
+     * @param category What category the event target belongs to: System, Gameplay, UI...
+     */
     public EventQueryParameters(Class<?> emittorClass,
                                 Class<?> targetClass,
                                 Event.Target target,
                                 Event.Type type,
-                                Event.Category category
+                                Event.Category category,
+                                String name
     ){
         this.emittorClass = emittorClass    == null ? Event.ANY_CLASS       : emittorClass;
         this.targetClass = targetClass      == null ? Event.ANY_CLASS       : targetClass;
@@ -47,4 +50,5 @@ public class EventQueryParameters {
     public Class<?> targetClass(){
         return targetClass;
     }
+    public String name(){return name;}
 }

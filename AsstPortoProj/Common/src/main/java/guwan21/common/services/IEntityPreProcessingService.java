@@ -7,7 +7,7 @@ public interface IEntityPreProcessingService {
     /**
      * Pre-processing pass for entities (E.g. the Asteroid Splitterator)<br>
      * Pre-condition: The main processing pass is about to occur.<br>
-     * Post-condition: Pre-processing complete - entities now ready for processing.<br>
+     * Post-condition: Pre-processing complete - entities now ready for main processing pass.<br>
      *<br>
      * @param data Current game state information<br>
      * @param world Current world state

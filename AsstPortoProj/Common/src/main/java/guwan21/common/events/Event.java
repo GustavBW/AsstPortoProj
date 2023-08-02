@@ -6,7 +6,7 @@ public class Event<T> implements Serializable{
 
     private static class Any{}
     public static Class<?> ANY_CLASS = Any.class;
-
+    public static String ANY_NAME = "unnamed";
 
     /**
      * What category an Event is in.
@@ -53,6 +53,7 @@ public class Event<T> implements Serializable{
     private Target target = Target.SERVICE;
     private Class<?> targetType = null;
     private Class<?> sourceType = null;
+    private String name = Event.ANY_NAME;
 
     public Event(){
 
@@ -66,6 +67,10 @@ public class Event<T> implements Serializable{
         this.sourceType = source.getClass();
     }
 
+    public Event<T> setName(String name){
+        this.name = name;
+        return this;
+    }
     public Event<T> setType(Type type){
         this.type = type;
         return this;
@@ -105,5 +110,8 @@ public class Event<T> implements Serializable{
     }
     public Class<?> getTargetType(){
         return targetType;
+    }
+    public String getName(){
+        return name;
     }
 }

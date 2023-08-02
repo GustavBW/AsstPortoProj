@@ -26,14 +26,16 @@ public class BulletPlugin implements IGamePluginService{
             IGamePluginService.class,
             Event.Target.SERVICE,
             Event.Type.INSTANT,
-            Event.Category.GAMEPLAY
+            Event.Category.GAMEPLAY,
+            "Player Firing"
     );
     private final EventQueryParameters firingEventsQueryEnemy = new EventQueryParameters(
             Enemy.class,
             IGamePluginService.class,
             Event.Target.SERVICE,
             Event.Type.INSTANT,
-            Event.Category.GAMEPLAY
+            Event.Category.GAMEPLAY,
+            "Enemy Firing"
     );
     private Function<Event<?>,Boolean> subscription1 = null;
     private Function<Event<?>,Boolean> subscription2 = null;

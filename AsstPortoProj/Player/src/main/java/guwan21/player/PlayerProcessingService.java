@@ -24,6 +24,11 @@ public class PlayerProcessingService implements IEntityProcessingService {
 
             if (player.getPart(LifePart.class).isDead()) {
                 world.removeEntity(player);
+                data.getBroker().publish(
+                        new Event<>( //player dead event
+                                player, Event.Type.INSTANT, Event.Category.GAMEPLAY, Event.Target.SERVICE
+                        ).setName("Player Death")
+                );
                 continue;
             }
 
@@ -41,6 +46,7 @@ public class PlayerProcessingService implements IEntityProcessingService {
                 data.getBroker().publish(
                         new Event<>(player, Event.Type.INSTANT, Event.Category.GAMEPLAY, Event.Target.SERVICE)
                                 .setTargetType(IGamePluginService.class)
+                                .setName("Player Firing")
                 );
             }
 

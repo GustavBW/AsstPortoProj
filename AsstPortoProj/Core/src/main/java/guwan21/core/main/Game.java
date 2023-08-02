@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import guwan21.common.data.*;
 import guwan21.common.data.entities.Bullet;
 import guwan21.common.data.entities.Entity;
+import guwan21.common.data.entities.Player;
+import guwan21.common.events.Event;
+import guwan21.common.events.EventQueryParameters;
 import guwan21.common.factories.ITimeBasedEntityFactory;
 import guwan21.common.services.IEntityPostProcessingService;
 import guwan21.common.services.IEntityPreProcessingService;
@@ -96,6 +99,10 @@ public class Game implements ApplicationListener {
                 ITimeBasedFactoriesProcessingService.class,
                 (SpringBeansManager.VoidFunction<ITimeBasedFactoriesProcessingService>) r -> r.process(data,world)
         );
+
+        data.getBroker().subscribe(event -> onPlayerDeath(data,event), new EventQueryParameters(
+                Player.class, Event.ANY_CLASS, Event.Target.SERVICE, Event.Type.INSTANT, Event.Category.GAMEPLAY,"Player Death"
+        ));
     }
 
     @Override
@@ -150,6 +157,12 @@ public class Game implements ApplicationListener {
 
             sr.end();
         }
+    }
+
+    private boolean onPlayerDeath(GameData data, Event<?> event){
+        System.out.println(event.getName());
+        System.out.println("You survived for: " + data.getMsFromGameStart() / 1000f + " seconds.");
+        return true;
     }
 
     @Override
