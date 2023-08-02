@@ -42,8 +42,8 @@ public class BulletConstructionService implements IEntityConstructionService {
         float angleIncrementRad = (float) ((Math.PI * 2) / shapeX.length);
 
         for(int i = 0; i < shapeX.length; i++){
-            shapeX[i] = angleIncrementRad * i * size + x;
-            shapeY[i] = angleIncrementRad * i * size + y;
+            shapeX[i] = (float) Math.cos(angleIncrementRad * i) * size + x;
+            shapeY[i] = (float) Math.sin(angleIncrementRad * i) * size + y;
         }
 
         entity.setShapeX(shapeX);

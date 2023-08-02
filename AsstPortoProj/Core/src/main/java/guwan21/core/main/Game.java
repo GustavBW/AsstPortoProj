@@ -31,6 +31,8 @@ public class Game implements ApplicationListener {
     private final LinkedHashMap<Class<?>, SpringBeansManager.VoidFunction<?>> onUpdateRun = new LinkedHashMap<>();
     private final AnnotationConfigApplicationContext cachedOnUpdateContext = SpringBeansManager.getContextFor("guwan21.core.components");
 
+
+
     private static OrthographicCamera cam;
     private ShapeRenderer sr;
 

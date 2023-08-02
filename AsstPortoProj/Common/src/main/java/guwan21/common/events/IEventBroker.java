@@ -33,10 +33,10 @@ public interface IEventBroker {
      * Removes the event
      * @param e event
      */
-    void removeEvent(Event<?> e);
+    void unpublish(Event<?> e);
 
     void publishAll(Collection<Event<?>> events);
-    void removeAll(Collection<Event<?>> events);
+    void unpublishAll(Collection<Event<?>> events);
 
     /**
      * Adds an event for others to query for

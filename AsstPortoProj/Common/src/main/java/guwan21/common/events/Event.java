@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public class Event<T> implements Serializable{
 
+    private static class Any{}
+    public static Class<?> ANY_CLASS = Any.class;
+
+
     /**
      * What category an Event is in.
      * Default: System.
@@ -11,7 +15,8 @@ public class Event<T> implements Serializable{
     public enum Category {
         SYSTEM,
         UI,
-        GAMEPLAY;
+        GAMEPLAY,
+        ANY;
     }
 
     /**
@@ -26,7 +31,8 @@ public class Event<T> implements Serializable{
         /**
          * Has to be removed manually
          */
-        LINGERING;
+        LINGERING,
+        ANY;
 
     }
 
@@ -37,7 +43,8 @@ public class Event<T> implements Serializable{
     public enum Target {
         ENTITY,
         SERVICE,
-        PLUGIN;
+        PLUGIN,
+        ANY;
     }
 
     private T objectSource = null;

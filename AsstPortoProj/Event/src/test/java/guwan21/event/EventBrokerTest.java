@@ -3,10 +3,15 @@ package guwan21.event;
 import guwan21.common.data.entities.Entity;
 import guwan21.common.events.Event;
 import guwan21.common.events.EventQueryParameters;
+import guwan21.common.events.IEventBroker;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -177,10 +182,85 @@ class EventBrokerTest {
     }
 
     @Test
+    void subscribeAndUnsubscribe(){
+        IEventBroker broker = new EventBroker();
+        AtomicInteger invocationCounter = new AtomicInteger(); //Could be done with Mockito
+        AtomicReference<Event<?>> eventInvokedWith = new AtomicReference<>();
+        Function<Event<?>,Boolean> subscriber1 = event -> {
+            invocationCounter.getAndIncrement();
+            eventInvokedWith.set(event);
+            return true;
+        };
+        Function<Event<?>,Boolean> subscriber2 = event -> {
+            invocationCounter.getAndIncrement();
+            eventInvokedWith.set(event);
+            return true;
+        };
+        EventQueryParameters params2 = new EventQueryParameters(Object.class, Object.class, Event.Target.ENTITY, Event.Type.INSTANT, Event.Category.GAMEPLAY);
+        EventQueryParameters params1 = new EventQueryParameters(Object.class, Object.class, Event.Target.SERVICE, Event.Type.INSTANT, Event.Category.GAMEPLAY);
+        broker.subscribe(subscriber1,params1);
+        broker.subscribe(subscriber2,params2);
+
+        //When subscribed and an event is published:
+        Event<?> eventPublished = new Event<>(new Object(), params1.type(), params1.category(), params1.target()).setTargetType(Object.class);
+        broker.publish(eventPublished);
+
+        //We expect one subscriber to be invoked once, with that specific event - since it matches the params
+        assertEquals(1, invocationCounter.get());
+        assertEquals(eventPublished, eventInvokedWith.get());
+
+        //However, if we then unsubscribe
+        broker.unsubscribe(subscriber1, params1);
+        //But issue the event again:
+        broker.publish(eventPublished);
+
+        //There should be no additional invocations
+        assertEquals(1, invocationCounter.get());
+
+
+        //If we throw the old subscriber and a new subscriber into the mix
+        EventQueryParameters params3 = new EventQueryParameters(null, Object.class, Event.Target.ENTITY, Event.Type.INSTANT, null);
+        Function<Event<?>,Boolean> subscriber3 = event -> {
+            invocationCounter.getAndIncrement();
+            eventInvokedWith.set(event);
+            return true;
+        };
+        broker.subscribe(subscriber3,params3);
+        broker.subscribe(subscriber1,params1);
+        //Alongside an event that matches none of them, but should match the new one because it is less specific
+        Event<?> secondEventPublished = new Event<>(new Entity(), params3.type(), Event.Category.SYSTEM, params3.target()).setTargetType(Object.class);
+        //reset the counters:
+        invocationCounter.set(0);
+        eventInvokedWith.set(null);
+
+        broker.publish(secondEventPublished);
+        //We should expect only this new subscriber to have incremented the values
+        assertEquals(1, invocationCounter.get());
+        assertEquals(eventPublished, eventInvokedWith.get());
+    }
+
+    @Test
     void addEvent() {
+
     }
 
     @Test
     void removeEvent() {
+        IEventBroker broker = new EventBroker();
+        Event<?> event = new Event<>(new Object(), Event.Type.INSTANT, Event.Category.GAMEPLAY,Event.Target.ENTITY)
+                .setTargetType(Entity.class);
+        broker.publish(event);
+
+        Collection<Event<?>> resultQ1 = broker.querySpecific(new EventQueryParameters(Object.class, Entity.class, Event.Target.ENTITY, Event.Type.INSTANT, Event.Category.GAMEPLAY));
+
+        assertEquals(1, resultQ1.size());
+        assertEquals(event,resultQ1.iterator().next());
+
+        broker.unpublish(event);
+
+        Collection<Event<?>> resultQ2 = broker.querySpecific(new EventQueryParameters(Object.class, Entity.class, Event.Target.ENTITY, Event.Type.INSTANT, Event.Category.GAMEPLAY));
+
+        assertEquals(0, resultQ2.size());
+        assertThrows(NoSuchElementException.class,() -> resultQ2.iterator().next());
     }
 }
