@@ -47,9 +47,9 @@ public class EnemyProcessingService implements IEntityProcessingService {
 
             weaponPart.setFiring(true);
             if (weaponPart.isFiring()) {
-                data.getBroker().addEvent(
+                data.getBroker().publish(
                         new Event<>(
-                        this,
+                                enemy,
                         Event.Type.INSTANT,
                         Event.Category.GAMEPLAY,
                         Event.Target.SERVICE

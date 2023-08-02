@@ -2,6 +2,7 @@ package guwan21.event;
 
 import guwan21.common.data.entities.Entity;
 import guwan21.common.events.Event;
+import guwan21.common.events.EventQueryParameters;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
@@ -70,34 +71,34 @@ class EventBrokerTest {
         Event<?> event4 = events.get(3); //event category changed
         Event<?> event5 = events.get(4); //event target changed
         Event<?> event6 = events.get(5); //event target class changed
-        broker.addAll(events);
+        broker.publishAll(events);
 
         //Testing source class distinction
-        Collection<Event<?>> resultQ1 = broker.querySpecific(Entity.class, Object.class, Event.Target.SERVICE,  Event.Type.INSTANT, Event.Category.GAMEPLAY);
+        Collection<Event<?>> resultQ1 = broker.querySpecific(new EventQueryParameters(Entity.class, Object.class, Event.Target.SERVICE,  Event.Type.INSTANT, Event.Category.GAMEPLAY));
 
         assertEquals(1, resultQ1.size());
         assertEquals(event2, resultQ1.iterator().next());
 
         //Testing event type distinction
-        Collection<Event<?>> resultQ2 = broker.querySpecific(Object.class, Object.class, Event.Target.SERVICE,  Event.Type.LINGERING, Event.Category.GAMEPLAY);
+        Collection<Event<?>> resultQ2 = broker.querySpecific(new EventQueryParameters(Object.class, Object.class, Event.Target.SERVICE,  Event.Type.LINGERING, Event.Category.GAMEPLAY));
 
         assertEquals(1, resultQ2.size());
         assertEquals(event3, resultQ2.iterator().next());
 
         //Testing event category distinction
-        Collection<Event<?>> resultQ3 = broker.querySpecific(Object.class, Object.class, Event.Target.SERVICE,  Event.Type.INSTANT, Event.Category.SYSTEM);
+        Collection<Event<?>> resultQ3 = broker.querySpecific(new EventQueryParameters(Object.class, Object.class, Event.Target.SERVICE,  Event.Type.INSTANT, Event.Category.SYSTEM));
 
         assertEquals(1, resultQ3.size());
         assertEquals(event4, resultQ3.iterator().next());
 
         //Testing event target distinction
-        Collection<Event<?>> resultQ4 = broker.querySpecific(Object.class, Object.class, Event.Target.ENTITY,  Event.Type.INSTANT, Event.Category.GAMEPLAY);
+        Collection<Event<?>> resultQ4 = broker.querySpecific(new EventQueryParameters(Object.class, Object.class, Event.Target.ENTITY,  Event.Type.INSTANT, Event.Category.GAMEPLAY));
 
         assertEquals(1, resultQ4.size());
         assertEquals(event5, resultQ4.iterator().next());
 
         //Testing event target class distinction
-        Collection<Event<?>> resultQ5 = broker.querySpecific(Object.class, Entity.class, Event.Target.SERVICE,  Event.Type.INSTANT, Event.Category.GAMEPLAY);
+        Collection<Event<?>> resultQ5 = broker.querySpecific(new EventQueryParameters(Object.class, Entity.class, Event.Target.SERVICE,  Event.Type.INSTANT, Event.Category.GAMEPLAY));
 
         assertEquals(1, resultQ5.size());
         assertEquals(event6, resultQ5.iterator().next());
@@ -106,10 +107,11 @@ class EventBrokerTest {
     @Test
     void executionTimeGetSpecific(){
         EventBroker broker = new EventBroker();
-        broker.addAll(getEventsWhereOneAttributeHasChanged());
+        broker.publishAll(getEventsWhereOneAttributeHasChanged());
         long timeA = System.currentTimeMillis();
+        EventQueryParameters params = new EventQueryParameters(Object.class, Entity.class, Event.Target.ENTITY,  Event.Type.INSTANT, Event.Category.SYSTEM);
         for(int i = 0; i < 1_000_000; i++){
-            broker.querySpecific(Object.class, Entity.class, Event.Target.ENTITY,  Event.Type.INSTANT, Event.Category.SYSTEM);
+            broker.querySpecific(params);
         }
         long deltaTime = System.currentTimeMillis() - timeA;
         System.out.println("Get specific, 1m runs: " + deltaTime + "ms");
@@ -118,10 +120,11 @@ class EventBrokerTest {
     @Test
     void executionTimeGetAny(){
         EventBroker broker = new EventBroker();
-        broker.addAll(getEventsWhereMostShareAttributes());
+        broker.publishAll(getEventsWhereMostShareAttributes());
         long timeA = System.currentTimeMillis();
+        EventQueryParameters params = new EventQueryParameters(Object.class, Entity.class, Event.Target.ENTITY,  Event.Type.INSTANT, Event.Category.SYSTEM);
         for(int i = 0; i < 1_000_000; i++){
-            broker.queryAny(Object.class, Entity.class, Event.Target.ENTITY,  Event.Type.INSTANT, Event.Category.SYSTEM);
+            broker.queryAny(params);
         }
         long deltaTime = System.currentTimeMillis() - timeA;
         System.out.println("Get specific, 1m runs: " + deltaTime + "ms");
@@ -131,42 +134,42 @@ class EventBrokerTest {
     @Test
     void getAny() {
         EventBroker broker = new EventBroker();
-        broker.addAll(getEventsWhereMostShareAttributes());
+        broker.publishAll(getEventsWhereMostShareAttributes());
 
         //There should be 8 events
-        Collection<Event<?>> resultQ0 = broker.queryAny(null, null, null,  null, null);
+        Collection<Event<?>> resultQ0 = broker.queryAny(new EventQueryParameters(null, null, null,  null, null));
         assertEquals(8,resultQ0.size());
 
         //There should be 8 events with source class "Object"
-        Collection<Event<?>> resultQ1 = broker.queryAny(Object.class, null, null,  null, null);
+        Collection<Event<?>> resultQ1 = broker.queryAny(new EventQueryParameters(Object.class, null, null,  null, null));
         assertEquals(8,resultQ1.size());
         resultQ1.forEach(
                 event -> assertEquals(event.getSource().getClass(), Object.class)
         );
 
         //There should be 5 events with event type "Instant"
-        Collection<Event<?>> resultQ2 = broker.queryAny(null, null, null,  Event.Type.INSTANT, null);
+        Collection<Event<?>> resultQ2 = broker.queryAny(new EventQueryParameters(null, null, null,  Event.Type.INSTANT, null));
         assertEquals(5,resultQ2.size());
         resultQ2.forEach(
                 event -> assertEquals(event.getType(), Event.Type.INSTANT)
         );
 
         //There should be 5 events in category "Gameplay"
-        Collection<Event<?>> resultQ3 = broker.queryAny(null, null, null,  null, Event.Category.GAMEPLAY);
+        Collection<Event<?>> resultQ3 = broker.queryAny(new EventQueryParameters(null, null, null,  null, Event.Category.GAMEPLAY));
         assertEquals(5,resultQ3.size());
         resultQ3.forEach(
                 event -> assertEquals(event.getCategory(), Event.Category.GAMEPLAY)
         );
 
         //There should be 3 events with target "Service"
-        Collection<Event<?>> resultQ4 = broker.queryAny(null, null, Event.Target.SERVICE,  null, null);
+        Collection<Event<?>> resultQ4 = broker.queryAny(new EventQueryParameters(null, null, Event.Target.SERVICE,  null, null));
         assertEquals(3,resultQ4.size());
         resultQ4.forEach(
                 event -> assertEquals(event.getTarget(), Event.Target.SERVICE)
         );
 
         //There should be 3 events with target class "Entity"
-        Collection<Event<?>> resultQ5 = broker.queryAny(null, Entity.class, null,  null, null);
+        Collection<Event<?>> resultQ5 = broker.queryAny(new EventQueryParameters(null, Entity.class, null,  null, null));
         assertEquals(3,resultQ5.size());
         resultQ5.forEach(
                 event -> assertEquals(event.getTargetType(), Entity.class)

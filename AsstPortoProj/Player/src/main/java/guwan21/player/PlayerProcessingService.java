@@ -38,7 +38,7 @@ public class PlayerProcessingService implements IEntityProcessingService {
 
             weaponPart.setFiring(data.getKeys().isDown(GameKeys.SPACE));
             if (weaponPart.isFiring()) {
-                data.getBroker().addEvent(
+                data.getBroker().publish(
                         new Event<>(player, Event.Type.INSTANT, Event.Category.GAMEPLAY, Event.Target.SERVICE)
                                 .setTargetType(IGamePluginService.class)
                 );

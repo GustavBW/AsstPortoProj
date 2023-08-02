@@ -1,9 +1,10 @@
 package guwan21.bullet;
 
 import java.lang.Math;
-import java.util.Collection;
+import java.util.function.Function;
 
 import guwan21.common.data.entities.Bullet;
+import guwan21.common.data.entities.Enemy;
 import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
@@ -12,43 +13,47 @@ import guwan21.common.data.entityparts.LifePart;
 import guwan21.common.data.entityparts.MovingPart;
 import guwan21.common.data.entityparts.PositionPart;
 import guwan21.common.events.Event;
+import guwan21.common.events.EventQueryParameters;
 import guwan21.common.services.IEntityConstructionService;
 import guwan21.common.services.IGamePluginService;
 import guwan21.common.util.EntityConstructionServiceRegistry;
 
 public class BulletPlugin implements IGamePluginService{
 
-    IEntityConstructionService bulletConstructor = EntityConstructionServiceRegistry.getFor(Bullet.class);
+    private final IEntityConstructionService bulletConstructor = EntityConstructionServiceRegistry.getFor(Bullet.class);
+    private final EventQueryParameters firingEventsQueryPlayer = new EventQueryParameters(
+            Player.class,
+            IGamePluginService.class,
+            Event.Target.SERVICE,
+            Event.Type.INSTANT,
+            Event.Category.GAMEPLAY
+    );
+    private final EventQueryParameters firingEventsQueryEnemy = new EventQueryParameters(
+            Enemy.class,
+            IGamePluginService.class,
+            Event.Target.SERVICE,
+            Event.Type.INSTANT,
+            Event.Category.GAMEPLAY
+    );
+    private Function<Event<?>,Boolean> subscription1 = null;
+    private Function<Event<?>,Boolean> subscription2 = null;
 
     @Override
     public void start(GameData data, World world) {
-        //TODO: Subscribe to broker.
+        subscription1 = data.getBroker().subscribe(event -> fireOnEvent(event, world),firingEventsQueryPlayer);
+        subscription2 = data.getBroker().subscribe(event -> fireOnEvent(event, world),firingEventsQueryEnemy);
     }
 
     @Override
     public void stop(GameData data, World world) {
+        data.getBroker().unsubscribe(subscription1,firingEventsQueryPlayer);
+        data.getBroker().unsubscribe(subscription2,firingEventsQueryEnemy);
         world.removeEntities(Bullet.class);
     }
 
-
-    public void checkFiringEvents(GameData data, World world) {
-        Collection<Event<?>> events = data.getBroker().querySpecific(
-                Player.class,
-                IGamePluginService.class,
-                Event.Target.SERVICE,
-                Event.Type.INSTANT,
-                Event.Category.GAMEPLAY
-        );
-
-        for(Event<?> event : events){
-            fire((Entity) event.getSource(), world);
-        }
-
-        events.forEach(event -> { //Uneccessary on automated consumptions when subscriptions are introduced
-            if(event.getType() == Event.Type.INSTANT){
-                data.getBroker().removeEvent(event);
-            }
-        });
+    private boolean fireOnEvent(Event<?> event, World world){
+        fire((Entity) event.getSource(),world);
+        return true;
     }
 
     public void fire(Entity shotOrigin, World world) {
@@ -77,8 +82,6 @@ public class BulletPlugin implements IGamePluginService{
                 new PositionPart(x, y, radians),
                 new LifePart(1,3)
         );
-
-        System.out.println("Bullet Plugin \"pew\" by " + shotOrigin.getClass());
 
         world.addEntity(bullet);
     }

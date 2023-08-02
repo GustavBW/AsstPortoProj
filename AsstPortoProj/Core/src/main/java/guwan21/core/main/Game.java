@@ -145,11 +145,6 @@ public class Game implements ApplicationListener {
 
                 sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
             }
-            if(entity instanceof Bullet){
-                System.out.println("Just rendered a bullet: " + entity);
-                System.out.println(shapex.length);
-                System.out.println(shapey.length);
-            }
 
             sr.end();
         }
