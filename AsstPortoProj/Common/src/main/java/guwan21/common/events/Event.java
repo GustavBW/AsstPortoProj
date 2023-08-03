@@ -51,8 +51,8 @@ public class Event<T> implements Serializable{
     private Type type = Type.INSTANT;
     private Category category = Category.SYSTEM;
     private Target target = Target.SERVICE;
-    private Class<?> targetType = null;
-    private Class<?> sourceType = null;
+    private Class<?> targetType = Event.ANY_CLASS;
+    private Class<?> sourceType = Event.ANY_CLASS;
     private String name = Event.ANY_NAME;
 
     public Event(){

@@ -12,7 +12,8 @@ public class AsteroidSplitteratorService implements IEntityPreProcessingService 
     private AsteroidFragmentationPlugin asteroidPlugin = new AsteroidFragmentationPlugin();
 
     public AsteroidSplitteratorService(){}
-    public AsteroidSplitteratorService(AsteroidFragmentationPlugin plugin){
+    //Package private constructor for testing purposes
+    AsteroidSplitteratorService(AsteroidFragmentationPlugin plugin){
         this.asteroidPlugin = plugin;
     }
 
@@ -29,7 +30,8 @@ public class AsteroidSplitteratorService implements IEntityPreProcessingService 
     public void process(GameData data, World world) {
         for(Entity asteroid : world.getEntities(Asteroid.class)){
 
-            if (asteroid.getPart(LifePart.class).isHit()) {
+            LifePart lp = asteroid.getPart(LifePart.class);
+            if (lp.isHit() && lp.getLife() > 1) { //Since this is on the preprocessing pass, damage havent been applied yet
                 world.addEntity(
                         asteroidPlugin.fracture(world, asteroid)
                 );

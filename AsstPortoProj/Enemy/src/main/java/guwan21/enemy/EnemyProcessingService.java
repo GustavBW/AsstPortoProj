@@ -23,8 +23,6 @@ public class EnemyProcessingService implements IEntityProcessingService {
     private final EventQueryParameters playerIsDeadQuery = new EventQueryParameters(
             Player.class, Event.ANY_CLASS, Event.Target.SERVICE, Event.Type.INSTANT, Event.Category.GAMEPLAY, "Player Death"
     );
-
-
     @FunctionalInterface
     private interface OnProcessRun{
         void run(GameData data, World world);

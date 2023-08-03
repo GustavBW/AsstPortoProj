@@ -32,13 +32,15 @@ public class AsteroidFragmentationPlugin implements IGamePluginService {
         PositionPart parentPosition = parent.getPart(PositionPart.class);
         MovingPart parentMovement = parent.getPart(MovingPart.class);
 
-        Entity fragment = new Asteroid();
+        Asteroid fragment = (Asteroid) constructor.create();
 
         constructor.configure(fragment,
                 new PositionPart(parentPosition.getX(), parentPosition.getY(), (float) (Math.random() * 2 * Math.PI)),
                 new LifePart(1,1_000_000),
                 new MovingPart(0,0,400,0,(float) ((Math.random() + .5) * parentMovement.getSpeed()))
                 );
+
+        constructor.updateShape(fragment);
 
         return fragment;
     }

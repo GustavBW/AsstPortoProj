@@ -56,10 +56,26 @@ public class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(
             new GameInputProcessor(data)
         );
+
         System.out.println("[GAME] Locating & caching Service Providers of SPI Contracts, found: ...");
-        for(SPI provider : SPILocator.getBeans(SPI.class)){
-            System.out.println("   |- "+provider.getClass() + " from: " + provider.getClass().getPackageName());
+
+        System.out.println("[GAME] Locating implementations of IEntityPreProcessingService, found: ...");
+        for(IEntityPreProcessingService proc : SPILocator.getBeans(IEntityPreProcessingService.class)){
+            System.out.println("   |- "+proc.getClass() + " from: " + proc.getClass().getPackageName());
         }
+        System.out.println("[GAME] Locating implementations of IEntityProcessingService, found: ...");
+        for(IEntityProcessingService proc : SPILocator.getBeans(IEntityProcessingService.class)){
+            System.out.println("   |- "+proc.getClass() + " from: " + proc.getClass().getPackageName());
+        }
+        System.out.println("[GAME] Locating implementations of IEntityPostProcessingService, found: ...");
+        for(IEntityPostProcessingService proc : SPILocator.getBeans(IEntityPostProcessingService.class)){
+            System.out.println("   |- "+proc.getClass() + " from: " + proc.getClass().getPackageName());
+        }
+        System.out.println("[GAME] Locating implementations of ITimeBasedEntityFactory, found ...");
+        for(ITimeBasedEntityFactory factory : SPILocator.getBeans(ITimeBasedEntityFactory.class)) {
+            System.out.println("   |- " + factory.getClass() + " from: " + factory.getClass().getPackageName());
+        }
+
         System.out.println();
 
         SpringBeansManager.forAnyOf(IPluginManagementService.class,
@@ -135,7 +151,7 @@ public class Game implements ApplicationListener {
 
     private boolean onPlayerDeath(GameData data, Event<?> event){
         System.out.println(event.getName());
-        System.out.println("You survived for: " + data.getMsFromGameStart() / 1000f + " seconds.");
+        System.out.println("You survived for: " + data.getMsFromGameStart() + " seconds.");
         return true;
     }
 

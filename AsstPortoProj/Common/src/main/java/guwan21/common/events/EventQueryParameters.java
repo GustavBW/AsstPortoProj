@@ -3,12 +3,12 @@ package guwan21.common.events;
 //Restructured from record as to provide null-safety required for the current implementation of IEventBroker
 public class EventQueryParameters {
 
-    private Class<?> emittorClass;
-    private Class<?> targetClass;
-    private Event.Target target;
-    private Event.Type type;
-    private Event.Category category;
-    private String name;
+    private final Class<?> emittorClass;
+    private final Class<?> targetClass;
+    private final Event.Target target;
+    private final Event.Type type;
+    private final Event.Category category;
+    private final String name;
 
     /**
      * @param emittorClass The class of the object that presumably emitted the event
@@ -29,6 +29,7 @@ public class EventQueryParameters {
         this.target = target                == null ? Event.Target.ANY      : target;
         this.type = type                    == null ? Event.Type.ANY        : type;
         this.category = category            == null ? Event.Category.ANY    : category;
+        this.name = name                    == null ? Event.ANY_NAME        : name;
     }
 
     public Event.Category category(){

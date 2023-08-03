@@ -14,5 +14,5 @@ module Common {
     uses guwan21.common.factories.ITimeBasedEntityFactory;
     uses guwan21.common.services.IEntityConstructionService;
     uses guwan21.common.events.IEventBroker;
-
+    uses guwan21.common.services.SPI;
 }
