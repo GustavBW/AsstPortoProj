@@ -30,10 +30,9 @@ public class EnemyProcessingService implements IEntityProcessingService {
     private final List<OnProcessRun> onProcessRun = List.of(
             this::subscribeToPlayerDeath, //First process pass just subscribes
             this::mainProcessPass, //Then comes the main runtime for the service
-            this::whenPlayerIsDead //And when the player dies the enemies will.. yeah youll see.
+            this::whenPlayerIsDead //And when the player dies the enemies will.. yeah you'll see.
     );
     private int functionPointer = 0;
-    private final Function<Event<?>,Boolean> playerIsDeadSubscription = this::onPlayerDied;
 
     @Override
     public void process(GameData data, World world) {
@@ -42,7 +41,7 @@ public class EnemyProcessingService implements IEntityProcessingService {
     }
 
     private void subscribeToPlayerDeath(GameData data, World world){
-        data.getBroker().subscribe(playerIsDeadSubscription, playerIsDeadQuery);
+        data.getBroker().subscribe(this::onPlayerDied, playerIsDeadQuery);
         functionPointer++;
     }
     private boolean onPlayerDied(Event<?> event){
