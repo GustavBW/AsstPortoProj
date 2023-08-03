@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 /**
  * Static Spring Beans utility.
@@ -13,11 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author GustavBW
  */
 public class SpringBeansManager {
-
-    @FunctionalInterface
-    public interface VoidFunction<T>{
-        void run(T obj);
-    }
 
     /**
      * K = package name, V = context
@@ -31,7 +27,7 @@ public class SpringBeansManager {
      * @param function function to run for bean <br>
      * @param <T> type param
      */
-    public static <T> void forAnyOf(Class<T> clazz, VoidFunction<T> function){
+    public static <T> void forAnyOf(Class<T> clazz, Consumer<T> function){
         forAnyOf(clazz, clazz.getPackageName(), function);
     }
 
@@ -43,8 +39,8 @@ public class SpringBeansManager {
      * @param pack name of the package in which the class declaration should be</br>
      * @param <T> type param
      */
-    public static <T> void forAnyOf(Class<T> clazz, String pack, VoidFunction<T> function){
-        function.run(getContext(pack).getBean(clazz));
+    public static <T> void forAnyOf(Class<T> clazz, String pack, Consumer<T> function){
+        function.accept(getContext(pack).getBean(clazz));
     }
 
     /**
@@ -60,7 +56,7 @@ public class SpringBeansManager {
      * Creates a new context and runs the provided function - empty func if null - in the order of the classes in keySet
      * @param functions Function map, do provide a function taking in an instance of any type in the class list
      */
-    public static void forAnyOfEither(String pack, LinkedHashMap<Class<?>, VoidFunction<?>> functions){
+    public static <T> void forAnyOfEither(String pack, LinkedHashMap<Class<?>, Consumer<? extends T>> functions){
         forAnyOfEither(getContext(pack),functions);
     }
 
@@ -68,15 +64,15 @@ public class SpringBeansManager {
      * For any of either class in the key set of the map (preserves order), try and execute the function provided as its value (empty if null)
      * with a bean provided by the context. May throw a BeansException.
      * @param context Spring AnnotationConfigApplicationContext
-     * @param functions Map of classes and functions
+     * @param consumers Map of classes and functions
      */
     @SuppressWarnings("unchecked")
-    public static void forAnyOfEither(AnnotationConfigApplicationContext context, LinkedHashMap<Class<?>, VoidFunction<?>> functions){
-        for(Class<?> clazz : functions.keySet()){
+    public static <T> void forAnyOfEither(AnnotationConfigApplicationContext context, Map<Class<?>, Consumer<? extends T>> consumers){
+        for(Class<?> clazz : consumers.keySet()){
             try{
                 @SuppressWarnings("rawtypes")
-                VoidFunction func = functions.getOrDefault(clazz, k -> {}); //Empty function if null
-                func.run(context.getBean(clazz));
+                Consumer func = consumers.getOrDefault(clazz, k -> {}); //Empty function if null
+                func.accept(context.getBean(clazz));
             }catch (ClassCastException | IllegalArgumentException ignored){
                 System.out.println("Unable to run provided / empty function for class: " + clazz.toString() + " during Game update cycle.");
             }

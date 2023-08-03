@@ -3,8 +3,9 @@ package guwan21.common.factories;
 import guwan21.common.data.entities.Entity;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
+import guwan21.common.services.SPI;
 
-public interface AutomatedEntityFactory<T extends Entity> {
+public interface AutomatedEntityFactory<T extends Entity> extends SPI {
 
     /**
      * Pre-condition: A new instance of type T is needed.<br>

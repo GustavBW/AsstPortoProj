@@ -15,11 +15,9 @@ import guwan21.common.factories.ITimeBasedEntityFactory;
 import guwan21.common.services.IEntityPostProcessingService;
 import guwan21.common.services.IEntityPreProcessingService;
 import guwan21.common.services.IEntityProcessingService;
+import guwan21.common.services.SPI;
 import guwan21.common.util.SPILocator;
-import guwan21.core.components.IEntityPostProcessingServicesRunner;
-import guwan21.core.components.IEntityPreProcessingServicesRunner;
-import guwan21.core.components.IEntityProcessingServicesRunner;
-import guwan21.core.components.ITimeBasedFactoriesProcessingService;
+import guwan21.core.components.*;
 import guwan21.core.managers.IPluginManagementService;
 import guwan21.core.managers.GameInputProcessor;
 import guwan21.core.spring.SpringBeansManager;
@@ -27,14 +25,14 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Component
 public class Game implements ApplicationListener {
 
-    private final LinkedHashMap<Class<?>, SpringBeansManager.VoidFunction<?>> onUpdateRun = new LinkedHashMap<>();
+    private final Map<Class<?>, Consumer<? extends IServicesRunner>> onUpdateRun = new LinkedHashMap<>();
     private final AnnotationConfigApplicationContext cachedOnUpdateContext = SpringBeansManager.getContextFor("guwan21.core.components");
-
-
 
     private static OrthographicCamera cam;
     private ShapeRenderer sr;
@@ -58,21 +56,9 @@ public class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(
             new GameInputProcessor(data)
         );
-        System.out.println("[GAME] Locating implementations of IEntityPreProcessingService, found: ...");
-        for(IEntityPreProcessingService proc : SPILocator.getBeans(IEntityPreProcessingService.class)){
-            System.out.println("   |- "+proc.getClass() + " from: " + proc.getClass().getPackageName());
-        }
-        System.out.println("[GAME] Locating implementations of IEntityProcessingService, found: ...");
-        for(IEntityProcessingService proc : SPILocator.getBeans(IEntityProcessingService.class)){
-            System.out.println("   |- "+proc.getClass() + " from: " + proc.getClass().getPackageName());
-        }
-        System.out.println("[GAME] Locating implementations of IEntityPostProcessingService, found: ...");
-        for(IEntityPostProcessingService proc : SPILocator.getBeans(IEntityPostProcessingService.class)){
-            System.out.println("   |- "+proc.getClass() + " from: " + proc.getClass().getPackageName());
-        }
-        System.out.println("[GAME] Locating implementations of ITimeBasedEntityFactory, found ...");
-        for(ITimeBasedEntityFactory factory : SPILocator.getBeans(ITimeBasedEntityFactory.class)){
-            System.out.println("   |- "+factory.getClass() + " from: " + factory.getClass().getPackageName());
+        System.out.println("[GAME] Locating & caching Service Providers of SPI Contracts, found: ...");
+        for(SPI provider : SPILocator.getBeans(SPI.class)){
+            System.out.println("   |- "+provider.getClass() + " from: " + provider.getClass().getPackageName());
         }
         System.out.println();
 
@@ -83,22 +69,10 @@ public class Game implements ApplicationListener {
             }
         );
         //Executed in order of declaration, see SpringBeansManager.forAnyOfEither
-        onUpdateRun.put(
-                IEntityPreProcessingServicesRunner.class,
-                (SpringBeansManager.VoidFunction<IEntityPreProcessingServicesRunner>) r -> r.process(data,world)
-        );
-        onUpdateRun.put(
-                IEntityProcessingServicesRunner.class,
-                (SpringBeansManager.VoidFunction<IEntityProcessingServicesRunner>) r -> r.process(data,world)
-        );
-        onUpdateRun.put(
-                IEntityPostProcessingServicesRunner.class,
-                (SpringBeansManager.VoidFunction<IEntityPostProcessingServicesRunner>) r -> r.process(data,world)
-        );
-        onUpdateRun.put(
-                ITimeBasedFactoriesProcessingService.class,
-                (SpringBeansManager.VoidFunction<ITimeBasedFactoriesProcessingService>) r -> r.process(data,world)
-        );
+        onUpdateRun.put(IEntityPreProcessingServicesRunner.class,   r -> r.process(data,world));
+        onUpdateRun.put(IEntityProcessingServicesRunner.class,      r -> r.process(data,world));
+        onUpdateRun.put(IEntityPostProcessingServicesRunner.class,  r -> r.process(data,world));
+        onUpdateRun.put(ITimeBasedFactoriesProcessingService.class, r -> r.process(data,world));
 
         data.getBroker().subscribe(event -> onPlayerDeath(data,event), new EventQueryParameters(
                 Player.class, Event.ANY_CLASS, Event.Target.SERVICE, Event.Type.INSTANT, Event.Category.GAMEPLAY,"Player Death"

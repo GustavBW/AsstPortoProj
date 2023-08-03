@@ -5,7 +5,7 @@ import guwan21.common.data.World;
 import guwan21.common.data.entities.Entity;
 import guwan21.common.data.entityparts.EntityPart;
 
-public interface IEntityConstructionService {
+public interface IEntityConstructionService extends SPI {
 
     /**
      * Creates an entity with default configuration.<br>

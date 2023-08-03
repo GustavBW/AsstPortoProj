@@ -3,7 +3,7 @@ package guwan21.common.services;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 
-public interface IGamePluginService {
+public interface IGamePluginService extends SPI {
     /**
      * Pre-condition: As part of game initialization phase. I.e. gameplay phase is about to begin<br>
      * Post-condition: Initialization complete and any additions to world and / or game state is resolved.<br>

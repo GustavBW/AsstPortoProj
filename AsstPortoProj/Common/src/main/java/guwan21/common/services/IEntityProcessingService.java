@@ -3,7 +3,7 @@ package guwan21.common.services;
 import guwan21.common.data.GameData;
 import guwan21.common.data.World;
 
-public interface IEntityProcessingService {
+public interface IEntityProcessingService extends SPI {
     /**
      * Main entity processing-pass.<br>
      * Pre-condition: A game tick has passed since last call.<br>
