@@ -2,13 +2,13 @@ package guwan21.event;
 
 import guwan21.common.events.Event;
 import guwan21.common.events.EventQueryParameters;
-import guwan21.common.events.IEventBroker;
+import guwan21.common.events.IEventMediatorService;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-public class EventBroker implements IEventBroker {
+public class EventMediatorService implements IEventMediatorService {
 
     /**
      * Events by their emitter's class
@@ -44,7 +44,7 @@ public class EventBroker implements IEventBroker {
 
     private final Set<Event<?>> allCurrentEvents = new HashSet<>();
 
-    public EventBroker(){
+    public EventMediatorService(){
         //All enumerations can be pre-populated
         Arrays.stream(Event.Target.values()).forEach(
                 target -> {
@@ -162,7 +162,7 @@ public class EventBroker implements IEventBroker {
     public Collection<Event<?>> queryAny(EventQueryParameters params) {
         Set<Event<?>> byEmittorClass= params.emittorClass() == Event.ANY_CLASS  ? allCurrentEvents : emitterClassEventMap.computeIfAbsent(params.emittorClass(), k -> new HashSet<>());
         Set<Event<?>> byTargetClass = params.targetClass() == Event.ANY_CLASS   ? allCurrentEvents : targetClassEventMap.computeIfAbsent(params.targetClass(), k -> new HashSet<>());
-        Set<Event<?>> byName        = params.name().equals(Event.ANY_NAME)       ? allCurrentEvents : nameEventMap.computeIfAbsent(params.name(), k -> new HashSet<>());
+        Set<Event<?>> byName        = params.name().equals(Event.ANY_NAME)      ? allCurrentEvents : nameEventMap.computeIfAbsent(params.name(), k -> new HashSet<>());
 
         Set<Event<?>> byTarget      = params.target() == Event.Target.ANY       ? allCurrentEvents : targetEventMap.get(params.target());
         Set<Event<?>> byType        = params.type() == Event.Type.ANY           ? allCurrentEvents : typeEventMap.get(params.type());

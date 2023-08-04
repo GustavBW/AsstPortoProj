@@ -3,7 +3,7 @@ package guwan21.event;
 import guwan21.common.data.entities.Entity;
 import guwan21.common.events.Event;
 import guwan21.common.events.EventQueryParameters;
-import guwan21.common.events.IEventBroker;
+import guwan21.common.events.IEventMediatorService;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
@@ -68,7 +68,7 @@ class EventBrokerTest {
 
     @Test
     void getSpecific() {
-        EventBroker broker = new EventBroker();
+        EventMediatorService broker = new EventMediatorService();
         List<Event<?>> events = getEventsWhereOneAttributeHasChanged();
         Event<?> event1 = events.get(0); //baseline
         Event<?> event2 = events.get(1); //source class changed
@@ -111,7 +111,7 @@ class EventBrokerTest {
 
     @Test
     void executionTimeGetSpecific(){
-        EventBroker broker = new EventBroker();
+        EventMediatorService broker = new EventMediatorService();
         broker.publishAll(getEventsWhereOneAttributeHasChanged());
         long timeA = System.currentTimeMillis();
         EventQueryParameters params = new EventQueryParameters(Object.class, Entity.class, Event.Target.ENTITY,  Event.Type.INSTANT, Event.Category.SYSTEM, Event.ANY_NAME);
@@ -124,7 +124,7 @@ class EventBrokerTest {
     }
     @Test
     void executionTimeGetAny(){
-        EventBroker broker = new EventBroker();
+        EventMediatorService broker = new EventMediatorService();
         broker.publishAll(getEventsWhereMostShareAttributes());
         long timeA = System.currentTimeMillis();
         EventQueryParameters params = new EventQueryParameters(Object.class, Entity.class, Event.Target.ENTITY,  Event.Type.INSTANT, Event.Category.SYSTEM, Event.ANY_NAME);
@@ -138,7 +138,7 @@ class EventBrokerTest {
 
     @Test
     void getAny() {
-        EventBroker broker = new EventBroker();
+        EventMediatorService broker = new EventMediatorService();
         broker.publishAll(getEventsWhereMostShareAttributes());
 
         //There should be 8 events
@@ -183,7 +183,7 @@ class EventBrokerTest {
 
     @Test
     void subscribeAndUnsubscribe(){
-        IEventBroker broker = new EventBroker();
+        IEventMediatorService broker = new EventMediatorService();
         AtomicInteger invocationCounter = new AtomicInteger(); //Could be done with Mockito
         AtomicReference<Event<?>> eventInvokedWith = new AtomicReference<>();
         Function<Event<?>,Boolean> subscriber1 = event -> {
@@ -246,7 +246,7 @@ class EventBrokerTest {
 
     @Test
     void removeEvent() {
-        IEventBroker broker = new EventBroker();
+        IEventMediatorService broker = new EventMediatorService();
         Event<?> event = new Event<>(new Object(), Event.Type.INSTANT, Event.Category.GAMEPLAY,Event.Target.ENTITY)
                 .setTargetType(Entity.class);
         broker.publish(event);

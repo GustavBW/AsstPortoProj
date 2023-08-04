@@ -18,7 +18,6 @@ public class SPILocator{
     private static final Map<Class<?>, List<Provider<?>>> servicesProvidersMap = new ConcurrentHashMap<>();
     private static final Map<Class<?>, ServiceLoader<?>> servicesLoaderMap = new ConcurrentHashMap<>();
 
-
     public static <T> T getBean(Class<T> clazz){
         return getBeans(clazz).get(0);
     }

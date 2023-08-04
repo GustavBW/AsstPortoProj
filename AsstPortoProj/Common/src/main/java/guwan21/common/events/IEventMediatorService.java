@@ -5,7 +5,7 @@ import guwan21.common.services.SPI;
 import java.util.Collection;
 import java.util.function.Function;
 
-public interface IEventBroker extends SPI {
+public interface IEventMediatorService extends SPI {
 
     /**
      * If any parameter of the query is null, only null.<br>
@@ -44,6 +44,6 @@ public interface IEventBroker extends SPI {
      * Adds an event for others to query for<br>
      * @param e event
      */
-    public void publish(Event<?> e);
+    void publish(Event<?> e);
 
 }

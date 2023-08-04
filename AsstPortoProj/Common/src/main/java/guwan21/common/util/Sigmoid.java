@@ -40,7 +40,7 @@ public class Sigmoid {
      * @return interpolated value
      */
     public static float normal(float x, float maximum, float minimum, float growthRate, float pointOfInflection){
-        return hashTableInverted.computeIfAbsent(
+        return hashTableNormal.computeIfAbsent(
                 compositeKeyOf(x,maximum,minimum,growthRate,pointOfInflection),
                 value -> (float) (minimum + (maximum - minimum) / (1 + Math.pow(Math.E, -1 * growthRate * (x - pointOfInflection))))
         );

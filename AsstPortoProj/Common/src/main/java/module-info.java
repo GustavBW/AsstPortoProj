@@ -1,3 +1,5 @@
+import guwan21.common.events.IEventMediatorService;
+
 module Common {
     exports guwan21.common.services;
     exports guwan21.common.data;
@@ -13,6 +15,6 @@ module Common {
     uses guwan21.common.services.IEntityPostProcessingService;
     uses guwan21.common.factories.ITimeBasedEntityFactory;
     uses guwan21.common.services.IEntityConstructionService;
-    uses guwan21.common.events.IEventBroker;
+    uses IEventMediatorService;
     uses guwan21.common.services.SPI;
 }

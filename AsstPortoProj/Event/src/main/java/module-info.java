@@ -1,6 +1,4 @@
-import guwan21.common.events.IEventBroker;
-
 module Event{
     requires Common;
-    provides IEventBroker with guwan21.event.EventBroker;
+    provides guwan21.common.events.IEventMediatorService with guwan21.event.EventMediatorService;
 }

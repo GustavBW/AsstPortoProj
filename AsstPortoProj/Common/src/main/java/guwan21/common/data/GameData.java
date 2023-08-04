@@ -1,15 +1,7 @@
 package guwan21.common.data;
 
-import guwan21.common.events.Event;
-import guwan21.common.events.IEventBroker;
+import guwan21.common.events.IEventMediatorService;
 import guwan21.common.util.SPILocator;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Function;
 
 public class GameData {
 
@@ -20,7 +12,7 @@ public class GameData {
     private int displayHeight;
     private final GameKeys keys = new GameKeys();
 
-    private final IEventBroker broker = SPILocator.getBean(IEventBroker.class);
+    private final IEventMediatorService broker = SPILocator.getBean(IEventMediatorService.class);
 
     public double getMsFromGameStart() {
         return msFromGameStart;
@@ -58,7 +50,7 @@ public class GameData {
         return displayHeight;
     }
 
-    public IEventBroker getBroker(){
+    public IEventMediatorService getBroker(){
         return broker;
     }
 }
