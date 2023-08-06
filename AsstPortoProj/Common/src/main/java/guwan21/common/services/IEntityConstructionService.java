@@ -30,8 +30,8 @@ public interface IEntityConstructionService extends SPI {
     /**
      * Updates the graphical extends of the entity to conform to the sum of its parts.<br>
      * @param entity to update<br>
-     * pre-condition: An entity is during its main processing step<br>
-     * post-condition: An entity which graphics have now been updated as part of that step<br>
+     * pre-condition: An entity has undergone a main processing pass<br>
+     * post-condition: An entity whose graphics have now been updated as part of that step<br>
      * @return the entity
      */
     Entity updateShape(Entity entity);
