@@ -15,6 +15,7 @@ public class EventMediatorService implements IEventMediatorService {
      */
     private final Map<Class<?>, Set<Event<?>>> emitterClassEventMap = new ConcurrentHashMap<>();
     private final Map<Class<?>, Set<Function<Event<?>,Boolean>>> emitterClassSubscriberMap = new ConcurrentHashMap<>();
+
     /**
      * Events by their target's class
      */
@@ -26,16 +27,19 @@ public class EventMediatorService implements IEventMediatorService {
      */
     private final Map<Event.Target, Set<Event<?>>> targetEventMap = new ConcurrentHashMap<>();
     private final Map<Event.Target, Set<Function<Event<?>,Boolean>>> targetSubscriberMap = new ConcurrentHashMap<>();
+
     /**
      * Events by their Event.Type enum value
      */
     private final Map<Event.Type, Set<Event<?>>> typeEventMap = new ConcurrentHashMap<>();
     private final Map<Event.Type, Set<Function<Event<?>,Boolean>>> typeSubscriberMap = new ConcurrentHashMap<>();
+
     /**
      * Events by their Event.Category enum value
      */
     private final Map<Event.Category, Set<Event<?>>> categoryEventMap = new ConcurrentHashMap<>();
     private final Map<Event.Category, Set<Function<Event<?>,Boolean>>> categorySubscriberMap = new ConcurrentHashMap<>();
+
     /**
      * Events by their name
      */
@@ -103,15 +107,19 @@ public class EventMediatorService implements IEventMediatorService {
     private Collection<Function<Event<?>,Boolean>> querySubscribers(EventQueryParameters params){
         Set<Function<Event<?>,Boolean>> byEmittorClass= emitterClassSubscriberMap.computeIfAbsent(params.emittorClass(), k -> new HashSet<>()); //possibly unpopulated
         byEmittorClass.addAll(emitterClassSubscriberMap.get(Event.ANY_CLASS)); //pre-populated in constructor
+
         Set<Function<Event<?>,Boolean>> byTargetClass = targetClassSubscriberMap.computeIfAbsent(params.targetClass(), k -> new HashSet<>());
         byTargetClass.addAll(targetClassSubscriberMap.get(Event.ANY_CLASS));
+
         Set<Function<Event<?>,Boolean>> byName = nameSubscribersMap.computeIfAbsent(params.name(), k -> new HashSet<>());
         byName.addAll(nameSubscribersMap.computeIfAbsent(Event.ANY_NAME, k -> new HashSet<>()));
 
         Set<Function<Event<?>,Boolean>> byTarget      = targetSubscriberMap.get(params.target());
         byTarget.addAll(targetSubscriberMap.get(Event.Target.ANY));
+
         Set<Function<Event<?>,Boolean>> byType        = typeSubscriberMap.get(params.type());
         byType.addAll(typeSubscriberMap.get(Event.Type.ANY));
+
         Set<Function<Event<?>,Boolean>> byCategory    = categorySubscriberMap.get(params.category());
         byCategory.addAll(categorySubscriberMap.get(Event.Category.ANY));
 
@@ -124,11 +132,12 @@ public class EventMediatorService implements IEventMediatorService {
      * @return true if consumed
      */
     private boolean evaluateSubscribers(Event<?> event){
-        EventQueryParameters params = new EventQueryParameters(event.getSourceType(),event.getTargetType(),event.getTarget(),event.getType(),event.getCategory(),event.getName());
-        Collection<Function<Event<?>,Boolean>> subscribers = querySubscribers(params);
+        EventQueryParameters params = new EventQueryParameters(
+                event.getSourceType(),event.getTargetType(),event.getTarget(),event.getType(),event.getCategory(),event.getName()
+        );
         boolean consumed = false;
 
-        for(Function<Event<?>,Boolean> subscriber : subscribers){
+        for(Function<Event<?>,Boolean> subscriber : querySubscribers(params)){
             if(subscriber.apply(event)){
                 consumed = true;
             }
@@ -153,6 +162,7 @@ public class EventMediatorService implements IEventMediatorService {
 
         return intersection(List.of(byEmittorClass, byTargetClass, byTarget, byType, byCategory, byName));
     }
+
     /**
      * If any parameter of the query is null, any will match.
      * @param params Query Parameters
@@ -191,18 +201,14 @@ public class EventMediatorService implements IEventMediatorService {
 
         allCurrentEvents.add(e);
     }
-
-
     @Override
     public void publishAll(Collection<Event<?>> events){
         events.forEach(this::publish);
     }
-
     @Override
     public void unpublishAll(Collection<Event<?>> events){
         events.forEach(this::unpublish);
     }
-
     /**
      * Removes the event
      * @param e event
@@ -230,7 +236,4 @@ public class EventMediatorService implements IEventMediatorService {
         }
         return intersection;
     }
-
-
-
 }

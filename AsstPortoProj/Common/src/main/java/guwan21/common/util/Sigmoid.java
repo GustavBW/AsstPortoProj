@@ -27,9 +27,9 @@ public class Sigmoid {
     public static float inverted(float x, float maximum, float minimum, float growthRate, float pointOfInflection){
         return hashTableInverted.computeIfAbsent(
                 compositeKeyOf(x,maximum,minimum,growthRate,pointOfInflection),
-                value -> (float) ((maximum) - (maximum - minimum) / (1 + Math.pow(Math.E, -1 * growthRate * (x - pointOfInflection)))));
+                value -> (float) ((maximum) - (maximum - minimum) / (1 + Math.pow(Math.E, -1 * growthRate * (x - pointOfInflection))))
+        );
     }
-
     /**
      * Interpolates the value: X along a sigmoid curve where
      * @param x is the value to be interpolated
